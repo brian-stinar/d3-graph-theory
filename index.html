@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>    
+    <style type="text/css">
+        .node {
+            fill: #ff0000;
+            stroke: #fff;
+            stroke-width: 1.5px;
+        }
+
+        .link {
+            stroke: #aaa;
+            stroke-width: 1.5px;
+        }
+    </style>
+    <title></title>
+    <script type="text/javascript" src="js/libs/d3/d3.v3.min.js"></script>
+    <script type="text/javascript" src="js/libs/jquery/jquery.js"></script>
+    <script src="http://jquery-xml2json-plugin.googlecode.com/svn/trunk/jquery.xml2json.js"></script>
+    <script type="text/javascript" src="js/buildGraph.js"></script>
+    <script type="text/javascript" src="js/graphTheory.js"></script>
+
+  </head>
+  <body>
+      
+      <script type="text/javascript">
+        
+        function buildJsonEdges(jsonRepresentation)
+        {
+            var edges = [];
+               
+            for (edgeNumber in jsonRepresentation.edgeData)
+            {
+                edges[edgeNumber] = {}
+                edges[edgeNumber]['source'] = jsonRepresentation.edgeData[edgeNumber].fromNode;
+                edges[edgeNumber]['target'] = jsonRepresentation.edgeData[edgeNumber].toNode;
+            }        
+            return edges;
+        }
+        
+        
+        function buildJsonNodes(jsonRepresentation)
+        {
+            var nodes = [];
+            
+            for (nodeNumber in jsonRepresentation.nodeData)
+            {
+                nodes[nodeNumber] = {};
+                nodes[nodeNumber].name = jsonRepresentation.nodeData[nodeNumber].nodeId;
+                // There will need to be a reckoning between D3 names and our names. 
+                // These 'names' are more like our IDs.
+                nodes[nodeNumber].description = jsonRepresentation.nodeData[nodeNumber].description;
+                nodes[nodeNumber].type = jsonRepresentation.nodeData[nodeNumber].type;
+                
+                //console.info(jsonRepresentation.nodeData[nodeNumber]);
+            }
+            return nodes;
+        }
+        
+        
+        $(document).ready
+        (
+            function ()
+            {
+                $.get('114.xml', function(d){
+
+                var jsonRepresentation = $.xml2json(d);
+
+                var edges = buildJsonEdges(jsonRepresentation);
+                var nodes = buildJsonNodes(jsonRepresentation);
+                
+                var data = {};
+                data["edges"] = edges;
+                data["nodes"] = nodes;
+                   
+                //console.log("my constructed data = ");
+                //console.log(data);
+                buildGraph(data);
+                
+                var graphTheory = d3.graphTheory(nodes, edges);
+            });
+            }
+        );      
+      </script>
+      
+  </body>
+</html>
