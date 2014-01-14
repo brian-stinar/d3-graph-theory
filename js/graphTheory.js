@@ -1,5 +1,17 @@
-// This is an attmept to build some graph theory logic into D3, using the
-// datatypes for nodes / edges (links) that D3 uses. 
+/* This is an attmept to build some graph theory logic into D3, using the
+datatypes for nodes / edges (links) that D3 uses. 
+
+This is for UNDIRECTED graphs only. If people like this, and want to pay me to 
+develop a directed graph version, I will. Otherwise, I think a undirected version
+will work for my current customer.
+
+Brian J. Stinar
+Noventum Custom Software Development 
+2013.01.13
+505-750-1169  - Call me if you want to talk or have questions. 
+I like that more than email.
+*/
+
 d3.graphTheory = function(nodes, edges)
 {
     this.nodes = nodes; 
@@ -7,15 +19,16 @@ d3.graphTheory = function(nodes, edges)
     
     this.findNodePostionInNodeList = function(nodeName)
     {
-        for (var i = 0; i < this.nodes.length; i++)
+        for (var nodeIndex = 0; nodeIndex < this.nodes.length; nodeIndex++)
         {            
-            if (this.nodes[i]["name"] === nodeName)
+            if (this.nodes[nodeIndex]["name"] === nodeName)
             {
-                return i;
+                return nodeIndex;
             }
         }
         return -1; 
     };
+
     
     // This representation is needed for basically all following graph algoriths
     this.buildUndirectedAdjacenyList = function()
@@ -23,56 +36,67 @@ d3.graphTheory = function(nodes, edges)
         this.adjaceyList = new Array(this.nodes.length);
         
         // Make our array-of-arrays
-        for (var i = 0; i < this.nodes.length; i++)
+        for (var rowIndex = 0; rowIndex < this.nodes.length; rowIndex++)
         {
-            this.adjaceyList[i] = new Array(this.nodes.length);
+            this.adjaceyList[rowIndex] = new Array(this.nodes.length);
         }
         
         // Initalize the array of arrays to all zeros
-        for (var i = 0; i < this.nodes.length; i++)
+        for (var rowIndex = 0; rowIndex < this.nodes.length; rowIndex++)
         {
-            for (var j = 0; j < this.nodes.length; j++)
+            for (var columnIndex = 0; columnIndex < this.nodes.length; columnIndex++)
             {
-                this.adjaceyList[i][j] = 0;            
+                this.adjaceyList[rowIndex][columnIndex] = 0;            
             }
         }
         
         // Edges is a listing of source->destination via node name
         // I need to get the indexof each element to figure out where
         // in the adjacency list things go
-        for (var i = 0; i < this.edges.length; i++)
+        // This is an undirected graph.
+        for (var edgeIndex = 0; edgeIndex < this.edges.length; edgeIndex++)
         {
-            var sourcePosition = this.findNodePostionInNodeList(this.edges[i]["source"]);
-            var targetPosition = this.findNodePostionInNodeList(this.edges[i]["target"]);
+            var sourcePosition = this.findNodePostionInNodeList(this.edges[edgeIndex]["source"]);
+            var targetPosition = this.findNodePostionInNodeList(this.edges[edgeIndex]["target"]);
             this.adjaceyList[sourcePosition][targetPosition] = 1;
             this.adjaceyList[targetPosition][sourcePosition] = 1;            
         }
     };
+
     
     this.printAdjacencyList = function()
     {
-    
         // Create labels based on node names
         var columnsLabels = "        ";
-        for (var i = 0; i < this.nodes.length; i++)
+        for (var nodeIndex = 0; nodeIndex < this.nodes.length; nodeIndex++)
         {
-            columnsLabels += this.nodes[i]["name"]  + "   ";
+            columnsLabels += this.nodes[nodeIndex]["name"]  + "   ";
         }
         console.info(columnsLabels);
         
         // Print the contents of the list
         var outputString = "";
 
-        for (var i = 0; i < this.nodes.length; i++)
+        for (var rowIndex = 0; rowIndex < this.nodes.length; rowIndex++)
         {
-            outputString = this.nodes[i]["name"];
-            for (var j = 0; j < this.nodes.length; j++)
+            outputString = this.nodes[rowIndex]["name"];
+            for (var columnIndex = 0; columnIndex < this.nodes.length; columnIndex++)
             {
-                outputString+= "      " + this.adjaceyList[i][j];
+                outputString+= "      " + this.adjaceyList[rowIndex][columnIndex];
             }
             console.info(outputString);
             outputString = "";
         }
+    };
+    
+    // http://en.wikipedia.org/wiki/Dijkstra's_algorithm 
+    // Edsger W. Dijkstra was a very cool mathematician.
+    // If you don't know much about him, check out the wikipedia page
+    // about him, and read more about graph theory.
+    // http://en.wikipedia.org/wiki/Edsger_W._Dijkstra
+    this.dijkstras = function(sourceNode)
+    {
+        return;
     };
 
     this.buildUndirectedAdjacenyList();
