@@ -12,6 +12,8 @@ Noventum Custom Software Development
 I like that more than email.
 */
 
+var infinity = "infinity";
+
 d3.graphTheory = function(nodes, edges)
 {
     this.nodes = nodes; 
@@ -96,8 +98,44 @@ d3.graphTheory = function(nodes, edges)
     // http://en.wikipedia.org/wiki/Edsger_W._Dijkstra
     this.dijkstras = function(sourceNode)
     {
+        var sourceNodeIndex = this.findNodePostionInNodeList(sourceNode["name"]);
+        if (sourceNodeIndex === -1)
+        {
+            console.debug("The source node index === -1. This shouldn't happen if findNodePostionInNodeList() is called with an existing node");
+            return -1; 
+        }
+        
+        var distances = new Array(this.nodes.length);
+        var previous = new Array(this.nodes.length); // Previous node to undefined
+        
+        // Initalize distances to infinity
+        for (var nodeIndex = 0; nodeIndex < this.nodes.length; nodeIndex++)
+        {
+            distances[nodeIndex] = infinity;
+        }
+        
+        distances[sourceNodeIndex] = 0;
+        var Q = this.getAllNeighbors(sourceNodeIndex); // TODO - write getAllNeighbors.
+        
         return;
     };
+    
+    
+    // Still not done.
+    this.getAllNeighbors = function(sourceNodeIndex)
+    {
+        var adjacencyList = this.adjaceyList[sourceNodeIndex];
+        var neighborList;
+        for (var nodeIndex = 0; nodeIndex < adjacencyList.length; nodeIndex++)
+        {
+            if (adjacencyList[nodeIndex] === "1")
+            {
+                neighborList.push() // Push the node name, or the node itself. These different indexes will eventually jack me up.
+            }
+        }
+        
+    }
+   
 
     this.buildUndirectedAdjacenyList();
     this.printAdjacencyList();
