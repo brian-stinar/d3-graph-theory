@@ -45,12 +45,12 @@ function buildGraph(data)
             
             // Have this conditional on the type of node
             
-            if (d.type == "1") // Hypothesis / Belief
+            if (d.type === "1") // Hypothesis / Belief
             {
                  return d3.rgb(255, 10, 200);   
             }
     
-            if (d.type == "2") // Action
+            if (d.type === "2") // Action
             {
                  return d3.rgb(200, 10, 10);   
             }
@@ -66,7 +66,7 @@ function buildGraph(data)
         .enter().append("text")
         .attr("x", 10)
         .attr("y", ".31em")
-        .text(function(d) { return d.description; });
+        .text(function(d) { return d.name; });
 
     function transformText(d) {
         return "translate(" + d.x + 1000 + "," + d.y + ")";
