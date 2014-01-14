@@ -51,13 +51,23 @@ d3.graphTheory = function(nodes, edges)
     
     this.printAdjacencyList = function()
     {
-        var outputString = "";
         
+        var columnsLabels = "        ";
         for (var i = 0; i < this.nodes.length; i++)
         {
+            columnsLabels += this.nodes[i]["name"]  + "   " 
+        }
+        console.info(columnsLabels);
+        
+        // Print the contents of the list
+        var outputString = "";
+
+        for (var i = 0; i < this.nodes.length; i++)
+        {
+            outputString = this.nodes[i]["name"];
             for (var j = 0; j < this.nodes.length; j++)
             {
-                outputString+= " " + this.adjaceyList[i][j];
+                outputString+= "      " + this.adjaceyList[i][j];
             }
             console.info(outputString);
             outputString = "";
