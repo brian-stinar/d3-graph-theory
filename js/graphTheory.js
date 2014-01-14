@@ -9,13 +9,13 @@ d3.graphTheory = function(nodes, edges)
     {
         for (var i = 0; i < this.nodes.length; i++)
         {            
-            if (this.nodes[i]["name"] == nodeName)
+            if (this.nodes[i]["name"] === nodeName)
             {
                 return i;
             }
         }
         return -1; 
-    }
+    };
     
     // This representation is needed for basically all following graph algoriths
     this.buildUndirectedAdjacenyList = function()
@@ -42,20 +42,21 @@ d3.graphTheory = function(nodes, edges)
         // in the adjacency list things go
         for (var i = 0; i < this.edges.length; i++)
         {
-            var sourcePosition = this.findNodePostionInNodeList(this.edges[i]["source"])
-            var targetPosition = this.findNodePostionInNodeList(this.edges[i]["target"])
+            var sourcePosition = this.findNodePostionInNodeList(this.edges[i]["source"]);
+            var targetPosition = this.findNodePostionInNodeList(this.edges[i]["target"]);
             this.adjaceyList[sourcePosition][targetPosition] = 1;
             this.adjaceyList[targetPosition][sourcePosition] = 1;            
         }
-    }
+    };
     
     this.printAdjacencyList = function()
     {
-        
+    
+        // Create labels based on node names
         var columnsLabels = "        ";
         for (var i = 0; i < this.nodes.length; i++)
         {
-            columnsLabels += this.nodes[i]["name"]  + "   " 
+            columnsLabels += this.nodes[i]["name"]  + "   ";
         }
         console.info(columnsLabels);
         
@@ -72,8 +73,8 @@ d3.graphTheory = function(nodes, edges)
             console.info(outputString);
             outputString = "";
         }
-    }
+    };
 
     this.buildUndirectedAdjacenyList();
     this.printAdjacencyList();
-}
+};
