@@ -9,7 +9,7 @@ Brian J. Stinar
 Noventum Custom Software Development 
 2013.01.13
 505-750-1169  - Call me if you want to talk or have questions. 
-I like that more than email.
+I like that more than email. 
 */
 
 var infinity = "infinity";
@@ -22,7 +22,7 @@ d3.graphTheory = function(nodes, edges)
     this.findNodePostionInNodeList = function(nodeName)
     {
         for (var nodeIndex = 0; nodeIndex < this.nodes.length; nodeIndex++)
-        {            
+        {
             if (this.nodes[nodeIndex]["name"] === nodeName)
             {
                 return nodeIndex;
@@ -60,8 +60,8 @@ d3.graphTheory = function(nodes, edges)
         {
             var sourcePosition = this.findNodePostionInNodeList(this.edges[edgeIndex]["source"]);
             var targetPosition = this.findNodePostionInNodeList(this.edges[edgeIndex]["target"]);
-            this.adjaceyList[sourcePosition][targetPosition] = 1;
-            this.adjaceyList[targetPosition][sourcePosition] = 1;            
+            this.adjaceyList[sourcePosition][targetPosition] = this.nodes[targetPosition]["name"];
+            this.adjaceyList[targetPosition][sourcePosition] = this.nodes[sourcePosition]["name"];            
         }
     };
 
@@ -74,7 +74,6 @@ d3.graphTheory = function(nodes, edges)
         {
             columnsLabels += this.nodes[nodeIndex]["name"]  + "   ";
         }
-        console.info(columnsLabels);
         
         // Print the contents of the list
         var outputString = "";
@@ -99,6 +98,7 @@ d3.graphTheory = function(nodes, edges)
     this.dijkstras = function(sourceNode)
     {
         var sourceNodeIndex = this.findNodePostionInNodeList(sourceNode["name"]);
+        
         if (sourceNodeIndex === -1)
         {
             console.debug("The source node index === -1. This shouldn't happen if findNodePostionInNodeList() is called with an existing node");
@@ -113,30 +113,37 @@ d3.graphTheory = function(nodes, edges)
         {
             distances[nodeIndex] = infinity;
         }
-        
+
         distances[sourceNodeIndex] = 0;
-        var Q = this.getAllNeighbors(sourceNodeIndex); // TODO - write getAllNeighbors.
+        var neighbors = this.getAllNeighbors(sourceNode);
+
+        console.info("all neighbors = ");
+        console.log(neighbors);
         
         return;
     };
     
     
-    // Still not done.
-    this.getAllNeighbors = function(sourceNodeIndex)
+    this.getAllNeighbors = function(sourceNode)
     {
+        var sourceNodeIndex = this.findNodePostionInNodeList(sourceNode["name"]);
+        
         var adjacencyList = this.adjaceyList[sourceNodeIndex];
-        var neighborList;
+        var neighborList = new Array();
         for (var nodeIndex = 0; nodeIndex < adjacencyList.length; nodeIndex++)
         {
-            if (adjacencyList[nodeIndex] === "1")
+            if (adjacencyList[nodeIndex] !== 0)
             {
-                neighborList.push() // Push the node name, or the node itself. These different indexes will eventually jack me up.
+                neighborList.push(adjacencyList[nodeIndex]); // Push the node name, or the node itself. These different indexes will eventually jack me up.
             }
         }
-        
-    }
-   
-
+        return neighborList;
+    };
+ 
+    
     this.buildUndirectedAdjacenyList();
     this.printAdjacencyList();
+    
+    this.dijkstras(this.nodes[0]);
+
 };
