@@ -102,6 +102,8 @@ d3.graphTheory = function(nodes, edges)
     // http://en.wikipedia.org/wiki/Edsger_W._Dijkstra
     this.dijkstras = function(sourceNode)
     {
+        console.log("Start of dijkstras. sourceNode = ");
+        console.log(sourceNode);
         var sourceNodeIndex = this.findNodePostionInNodeList(sourceNode["name"]);
         
         if (sourceNodeIndex === -1)
@@ -123,13 +125,19 @@ d3.graphTheory = function(nodes, edges)
 
         
         var nodesToIterateOver = this.nodes.slice(0); // Copy the array. These both point to the same objects now.
+        console.log("nodesToIterateOver = ");
+        console.log(nodesToIterateOver);
+        
         while (nodesToIterateOver.length > 0)
-        {               
+        {
             var u = this.getClosestNeighbor(sourceNode, distances); // Crappy psuedo-code name
+            console.log("closestNode = ");
+            console.log(u);
             
             // Check the distance, to make sure it's non-infinite
-            if (distances[this.findNodePostionInNodeList(closestNeighbor)] === infinity)
+            if (distances[this.findNodePostionInNodeList(u)] === infinity)
             {
+                console.log("distance === infinity - exiting");
                 break;
             }
             
@@ -164,7 +172,8 @@ d3.graphTheory = function(nodes, edges)
             console.log(closestNeighbor);
             
         }
-        
+        console.log("after dijkstras. Distances = ");
+        console.log(distances);
         return;
     };
 
