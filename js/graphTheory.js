@@ -123,6 +123,8 @@ d3.graphTheory = function(nodes, edges)
 
         distances[sourceNodeIndex] = 0;
 
+        // distance[neighbor] = 1; 
+        
         
         var nodesToIterateOver = this.nodes.slice(0); // Copy the array. These both point to the same objects now.
         console.log("nodesToIterateOver = ");
@@ -130,7 +132,7 @@ d3.graphTheory = function(nodes, edges)
         
         while (nodesToIterateOver.length > 0)
         {
-            var u = this.getClosestNeighbor(sourceNode, distances); // Crappy psuedo-code name
+            var u = this.getSmallestDistance(sourceNode, distances); // Crappy psuedo-code name - also wrong. It needs to get the smallest distance, not the closest neighbor. This is itself in case 1.
             console.log("closestNode = ");
             console.log(u);
             
@@ -177,24 +179,31 @@ d3.graphTheory = function(nodes, edges)
         return;
     };
 
-    this.getClosestNeighbor = function(currentSourceNode, distances)
+    // Needs to be fixed to get the smallest distance NOT the closest neighbor.
+    // These are different.
+    this.getSmallestDistance = function(distances)
     {
-        var neighbors = this.getAllNeighbors(currentSourceNode);
+        //var neighbors = this.getAllNeighbors(currentSourceNode);
         var closestNeighborDistance = MAX_INT; 
-        var closestNeighbor;
-        var currentSourceNodeIndex = this.findNodePostionInNodeList(currentSourceNode["name"]);
+        //var closestNeighbor;
+        //var currentSourceNodeIndex = this.findNodePostionInNodeList(currentSourceNode["name"]);
         
+        /*
         for (var neighborIndex = 0; neighborIndex < neighbors.length; neighborIndex++)
         {
-            console.log("\tdistances[sourceNode] = ");
+            console.log("\tcurrentSourceNodeIndex = ");
+            console.log(currentSourceNodeIndex);
+            console.log("\tdistances[currentSourceNodeIndex] = ");
             console.log(distances[currentSourceNodeIndex]);
             if ((distances[currentSourceNodeIndex] !== infinity) && (distances[currentSourceNodeIndex] < closestNeighborDistance))
             {
                 closestNeighbor = neighbors[neighborIndex];
             }
         }
-      
+        console.log("Returning closestNeighbor=");
+        console.log(closestNeighbor);
         return closestNeighbor;
+        */ 
     };
     
     this.getAllNeighbors = function(sourceNode)
