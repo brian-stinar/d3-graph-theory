@@ -17,6 +17,8 @@ var infinity = "infinity";
 // http://stackoverflow.com/questions/307179/what-is-javascripts-max-int-whats-the-highest-integer-value-a-number-can-go-t
 var MAX_INT = Math.pow(2, 53); 
 
+var distanceBetweenNodes = 1; // Will need to be redone for weighted graphs
+
 d3.graphTheory = function(nodes, edges)
 {
     this.nodes = nodes; 
@@ -119,34 +121,58 @@ d3.graphTheory = function(nodes, edges)
 
         distances[sourceNodeIndex] = 0;
 
+        
         var nodesToIterateOver = this.nodes.slice(0); // Copy the array. These both point to the same objects now.
-        // TODO: fix this
-        /* 
-        while (nodes_in_graph)
-        {
+        while (nodesToIterateOver.length > 0)
+        {               
+            var u = this.getClosestNeighbor(sourceNode, distances); // Crappy psuedo-code name
+            
+            // Check the distance, to make sure it's non-infinite
+            if (distances[this.findNodePostionInNodeList(closestNeighbor)] === infinity)
+            {
+                break;
+            }
+            
+            // Remove closestNeighbor from nodesToIterateOver
+            var indexOfRemoval = nodesToIterateOver.indexOf(closestNeighbor);
+            if (indexOfRemoval > -1)
+            {
+                nodesToIterateOver.splice(indexOfRemoval, 1);
+            }
+            else
+            {
+                console.log("Error! indexOfRemoval === -1");
+            }
+            
+            var neighbors = this.getAllNeighbors(sourceNode);
+            for (var neightborIndex = 0; neightborIndex < neighbors.length; neightborIndex++)
+            {
+                var v = neighbors[neightborIndex]; // Crappy name from psuedo-code implementation on wikipedia.
+                var vPosition = this.findNodePostionInNodeList(v["name"]);
+                
+                var alt = distance[this.findNodePostionInNodeList(u["name"])] + distanceBetweenNodes; // +1 
+                
+                if ((alt < distance[vPosition]) || (distance[vPosition] === infinite))
+                {
+                    distance[v["name"]] = alt;
+                    previous.push(u); 
+                    // decrease-key v in Q;                           // Reorder v in the Queue // Not sure...?
+                }
+            }
+            
+            console.info("all neighbors = ");
+            console.log(closestNeighbor);
             
         }
-        */ 
-       
-        var closestNeighbor = this.getClosestNeighbor(sourceNode, distances);       
-        console.info("all neighbors = ");
-        console.log(closestNeighbor);
         
         return;
     };
 
     this.getClosestNeighbor = function(currentSourceNode, distances)
     {
-        console.log("inside getClosestNeighbor()");
         var neighbors = this.getAllNeighbors(currentSourceNode);
-        console.log("\t\tneighbors = ");
-        console.log(neighbors);
         var closestNeighborDistance = MAX_INT; 
         var closestNeighbor;
-        console.log("\tdistances = ");
-        console.log(distances);
-        console.log("\tsourceNode=");
-        console.log(currentSourceNode);
         var currentSourceNodeIndex = this.findNodePostionInNodeList(currentSourceNode["name"]);
         
         for (var neighborIndex = 0; neighborIndex < neighbors.length; neighborIndex++)
