@@ -14,6 +14,9 @@ I like that more than email.
 
 var infinity = "infinity";
 
+// http://stackoverflow.com/questions/307179/what-is-javascripts-max-int-whats-the-highest-integer-value-a-number-can-go-t
+var MAX_INT = Math.pow(2, 53); 
+
 d3.graphTheory = function(nodes, edges)
 {
     this.nodes = nodes; 
@@ -115,14 +118,41 @@ d3.graphTheory = function(nodes, edges)
         }
 
         distances[sourceNodeIndex] = 0;
-        var neighbors = this.getAllNeighbors(sourceNode);
+        
+        // TODO: uncomment this. It is needed 
+        // var neighbors = this.getAllNeighbors(sourceNode);
 
+        /* 
+        while (neighbors.length > 0)
+        {
+            
+        }
+        */ 
+       
+       var closestNeighbor = this.getClosestNeighbor(sourceNode);
+       
         console.info("all neighbors = ");
         console.log(neighbors);
         
         return;
     };
-    
+
+    this.getClosestNeighbor = function(sourceNode)
+    {
+        var neighbors = this.getAllNeighbors(sourceNode);
+        var closestNeighborDistance = MAX_INT; 
+        var closestNeighbor;
+        
+        for (var neighborIndex = 0; neighborIndex < neighbors.length;)
+        {
+            if ((distances[sourceNode] !== infinity) && (distances[sourceNode] < closestNeighborDistance))
+            {
+                closestNeighbor = neighbors[neighborIndex];
+            }
+        }
+      
+        return closestNeighbor;
+    };
     
     this.getAllNeighbors = function(sourceNode)
     {
