@@ -7,7 +7,7 @@ will work for my current customer.
 
 Brian J. Stinar
 Noventum Custom Software Development 
-2013.01.13
+2014.01.13
 505-750-1169  - Call me if you want to talk or have questions. 
 I like that more than email. 
 */
@@ -118,34 +118,42 @@ d3.graphTheory = function(nodes, edges)
         }
 
         distances[sourceNodeIndex] = 0;
-        
-        // TODO: uncomment this. It is needed 
-        // var neighbors = this.getAllNeighbors(sourceNode);
 
+        var nodesToIterateOver = this.nodes.slice(0); // Copy the array. These both point to the same objects now.
+        // TODO: fix this
         /* 
-        while (neighbors.length > 0)
+        while (nodes_in_graph)
         {
             
         }
         */ 
        
-       var closestNeighbor = this.getClosestNeighbor(sourceNode);
-       
+        var closestNeighbor = this.getClosestNeighbor(sourceNode, distances);       
         console.info("all neighbors = ");
-        console.log(neighbors);
+        console.log(closestNeighbor);
         
         return;
     };
 
-    this.getClosestNeighbor = function(sourceNode)
+    this.getClosestNeighbor = function(currentSourceNode, distances)
     {
-        var neighbors = this.getAllNeighbors(sourceNode);
+        console.log("inside getClosestNeighbor()");
+        var neighbors = this.getAllNeighbors(currentSourceNode);
+        console.log("\t\tneighbors = ");
+        console.log(neighbors);
         var closestNeighborDistance = MAX_INT; 
         var closestNeighbor;
+        console.log("\tdistances = ");
+        console.log(distances);
+        console.log("\tsourceNode=");
+        console.log(currentSourceNode);
+        var currentSourceNodeIndex = this.findNodePostionInNodeList(currentSourceNode["name"]);
         
-        for (var neighborIndex = 0; neighborIndex < neighbors.length;)
+        for (var neighborIndex = 0; neighborIndex < neighbors.length; neighborIndex++)
         {
-            if ((distances[sourceNode] !== infinity) && (distances[sourceNode] < closestNeighborDistance))
+            console.log("\tdistances[sourceNode] = ");
+            console.log(distances[currentSourceNodeIndex]);
+            if ((distances[currentSourceNodeIndex] !== infinity) && (distances[currentSourceNodeIndex] < closestNeighborDistance))
             {
                 closestNeighbor = neighbors[neighborIndex];
             }
@@ -156,9 +164,9 @@ d3.graphTheory = function(nodes, edges)
     
     this.getAllNeighbors = function(sourceNode)
     {
-        var sourceNodeIndex = this.findNodePostionInNodeList(sourceNode["name"]);
+        var currentSourceNodeIndex = this.findNodePostionInNodeList(sourceNode["name"]);
         
-        var adjacencyList = this.adjaceyList[sourceNodeIndex];
+        var adjacencyList = this.adjaceyList[currentSourceNodeIndex];
         var neighborList = new Array();
         for (var nodeIndex = 0; nodeIndex < adjacencyList.length; nodeIndex++)
         {
