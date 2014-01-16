@@ -123,8 +123,8 @@ d3.graphTheory = function(nodes, edges)
 
         distances[sourceNodeIndex] = 0;
 
-        // distance[neighbor] = 1; 
-        
+        console.log("initial distances = ");
+        console.log(distances);
         
         var nodesToIterateOver = this.nodes.slice(0); // Copy the array. These both point to the same objects now.
         console.log("nodesToIterateOver = ");
@@ -132,7 +132,9 @@ d3.graphTheory = function(nodes, edges)
         
         while (nodesToIterateOver.length > 0)
         {
-            var u = this.getSmallestDistance(sourceNode, distances); // Crappy psuedo-code name - also wrong. It needs to get the smallest distance, not the closest neighbor. This is itself in case 1.
+            console.log("distances = ");
+            console.log(distances);
+            var u = this.getSmallestDistance(distances); // Crappy psuedo-code name - also wrong. It needs to get the smallest distance, not the closest neighbor. This is itself in case 1.
             console.log("closestNode = ");
             console.log(u);
             
@@ -144,7 +146,7 @@ d3.graphTheory = function(nodes, edges)
             }
             
             // Remove closestNeighbor from nodesToIterateOver
-            var indexOfRemoval = nodesToIterateOver.indexOf(closestNeighbor);
+            var indexOfRemoval = nodesToIterateOver.indexOf(u);
             if (indexOfRemoval > -1)
             {
                 nodesToIterateOver.splice(indexOfRemoval, 1);
@@ -160,11 +162,11 @@ d3.graphTheory = function(nodes, edges)
                 var v = neighbors[neightborIndex]; // Crappy name from psuedo-code implementation on wikipedia.
                 var vPosition = this.findNodePostionInNodeList(v["name"]);
                 
-                var alt = distance[this.findNodePostionInNodeList(u["name"])] + distanceBetweenNodes; // +1 
+                var alt = distances[this.findNodePostionInNodeList(u["name"])] + distanceBetweenNodes; // +1 
                 
-                if ((alt < distance[vPosition]) || (distance[vPosition] === infinite))
+                if ((alt < distances[vPosition]) || (distances[vPosition] === infinite))
                 {
-                    distance[v["name"]] = alt;
+                    distances[v["name"]] = alt;
                     previous.push(u); 
                     // decrease-key v in Q;                           // Reorder v in the Queue // Not sure...?
                 }
@@ -182,9 +184,29 @@ d3.graphTheory = function(nodes, edges)
     // Needs to be fixed to get the smallest distance NOT the closest neighbor.
     // These are different.
     this.getSmallestDistance = function(distances)
-    {
-        //var neighbors = this.getAllNeighbors(currentSourceNode);
-        var closestNeighborDistance = MAX_INT; 
+    {        
+        var closestDistance = MAX_INT;
+        var closestNode; 
+        
+        console.log("inside getSmallestDistance()");
+        console.log("\tdistances = ");
+        console.log(distances);
+        
+        
+        for (var distancesIndex = 0; distancesIndex < distances.length; distancesIndex++)
+        {
+            if ((distances[distancesIndex] !== infinity) && (distances[distancesIndex] < closestDistance))
+            {
+                closestDistance = distances[distancesIndex];
+                closestNode = this.nodes[distancesIndex];
+                console.log("\t\t distances[distancesIndex] = ");
+                console.log(distances[distancesIndex]);
+                console.log("\t\tclosestDistance = ");
+                console.log(closestDistance);
+            }
+        }
+        return closestNode;
+        
         //var closestNeighbor;
         //var currentSourceNodeIndex = this.findNodePostionInNodeList(currentSourceNode["name"]);
         
