@@ -62,33 +62,35 @@
         (
             function ()
             {
-                
-                $.get('114.xml', function(d){
-
-                var jsonRepresentation = $.xml2json(d);
-
-                var edges = buildJsonEdges(jsonRepresentation);
-                var nodes = buildJsonNodes(jsonRepresentation);
-                
+                var usingXml = false;
                 var data = {};
-                data["edges"] = edges;
-                data["nodes"] = nodes;
-
-                // Remove this when I want to read from an XML file.
-                data["nodes"] = [{"name":"1"}, {"name":"2"}, {"name":"3"}, {"name":"4"}];
-                data["edges"] =  
-                [
-                    {"source":"1", "target":"2"}, {"source":"1", "target":"3"}, {"source":"1", "target":"4"},
-                    {"source":"2", "target":"2"}, {"source":"2", "target":"3"}, {"source":"2", "target":"4"},
-                    {"source":"3", "target":"1"}, {"source":"3", "target":"2"}, {"source":"3", "target":"4"},
-                    {"source":"4", "target":"1"}, {"source":"4", "target":"2"}, {"source":"4", "target":"3"}               
-                ];
                 
+                if (usingXml)
+                {
+                    $.get('114.xml', function(d){
+
+                        var jsonRepresentation = $.xml2json(d);
+                        
+                        data["edges"] = buildJsonEdges(jsonRepresentation);
+                        data["nodes"] = buildJsonNodes(jsonRepresentation);
+                    });
+                }
+               
+                else
+                {
+                    data["nodes"] = [{"name":"1"}, {"name":"2"}, {"name":"3"}, {"name":"4"}];
+                    data["edges"] =  
+                    [
+                        {"source":"1", "target":"2"}, {"source":"1", "target":"3"}, {"source":"1", "target":"4"},
+                        {"source":"2", "target":"2"}, {"source":"2", "target":"3"}, {"source":"2", "target":"4"},
+                        {"source":"3", "target":"1"}, {"source":"3", "target":"2"}, {"source":"3", "target":"4"},
+                        {"source":"4", "target":"1"}, {"source":"4", "target":"2"}, {"source":"4", "target":"3"}               
+                    ];
+                }
                 buildGraph(data);
 
-                
-                var graphTheory = d3.graphTheory(nodes, edges);
-            });
+                var graphTheory = d3.graphTheory(data["nodes"], data["edges"]);
+
             }
         );      
       </script>
