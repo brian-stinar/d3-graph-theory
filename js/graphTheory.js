@@ -12,6 +12,9 @@ Noventum Custom Software Development
 I like that more than email. 
 */
 
+// TODO: Make the source node one color, and all the other nodes another color.
+// TODO: Figure out how to print distances, maybe after the node name? 
+
 var infinity = "infinity";
 
 // http://stackoverflow.com/questions/307179/what-is-javascripts-max-int-whats-the-highest-integer-value-a-number-can-go-t
@@ -231,6 +234,7 @@ d3.graphTheory = function(nodes, edges)
     
     this.buildUndirectedAdjacenyList();
     this.printAdjacencyList();
+    
     
     return this;
 };
