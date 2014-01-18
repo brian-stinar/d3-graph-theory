@@ -78,13 +78,11 @@
                
                 else
                 {
-                    data["nodes"] = [{"name":"1"}, {"name":"2"}, {"name":"3"}, {"name":"4"}];
+                    data["nodes"] = [{"name":"1"}, {"name":"2"}, {"name":"3"}, {"name":"4"}, {"name":"5"}];
                     data["edges"] =  
                     [
-                        {"source":"1", "target":"2"}, {"source":"1", "target":"3"}, {"source":"1", "target":"4"},
-                        {"source":"2", "target":"2"}, {"source":"2", "target":"3"}, {"source":"2", "target":"4"},
-                        {"source":"3", "target":"1"}, {"source":"3", "target":"2"}, {"source":"3", "target":"4"},
-                        {"source":"4", "target":"1"}, {"source":"4", "target":"2"}, {"source":"4", "target":"3"}               
+                        {"source":"1", "target":"2"}, {"source":"2", "target":"3"}, {"source":"3", "target":"4"},
+                        {"source":"4", "target":"5"}, {"source":"5", "target":"1"}             
                     ];
                 }
                 buildGraph(data);
