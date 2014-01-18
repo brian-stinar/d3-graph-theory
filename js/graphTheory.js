@@ -16,7 +16,6 @@ var infinity = "infinity";
 
 // http://stackoverflow.com/questions/307179/what-is-javascripts-max-int-whats-the-highest-integer-value-a-number-can-go-t
 var MAX_INT = Math.pow(2, 53); 
-
 var distanceBetweenNodes = 1; // Will need to be redone for weighted graphs
 
 d3.graphTheory = function(nodes, edges)
@@ -103,6 +102,7 @@ d3.graphTheory = function(nodes, edges)
     this.dijkstras = function(sourceNode)
     {
         console.log("Start of dijkstras. sourceNode = ");
+
         console.log(sourceNode);
         var sourceNodeIndex = this.findNodePostionInNodeList(sourceNode["name"]);
         
@@ -126,15 +126,18 @@ d3.graphTheory = function(nodes, edges)
         console.log("initial distances = ");
         console.log(distances);
         
+        console.log("this.nodes = ");
+        console.log(this.nodes);
         var nodesToIterateOver = this.nodes.slice(0); // Copy the array. These both point to the same objects now.
         console.log("nodesToIterateOver = ");
         console.log(nodesToIterateOver);
+
         
         while (nodesToIterateOver.length > 0)
         {
             console.log("distances = ");
             console.log(distances);
-            var u = this.getSmallestDistance(distances); // Crappy psuedo-code name - also wrong. It needs to get the smallest distance, not the closest neighbor. This is itself in case 1.
+            var u = this.getSmallestDistance(distances, nodesToIterateOver); // Crappy psuedo-code name - also wrong. It needs to get the smallest distance, not the closest neighbor. This is itself in case 1.
             console.log("closestNode = ");
             console.log(u);
             
@@ -147,13 +150,18 @@ d3.graphTheory = function(nodes, edges)
             
             // Remove closestNeighbor from nodesToIterateOver
             var indexOfRemoval = nodesToIterateOver.indexOf(u);
+            console.log("nodesToIterateOver = ");
+            console.log(nodesToIterateOver);
+            
             if (indexOfRemoval > -1)
             {
                 nodesToIterateOver.splice(indexOfRemoval, 1);
             }
+            
             else
             {
                 console.log("Error! indexOfRemoval === -1");
+                return;
             }
             
             var neighbors = this.getAllNeighbors(sourceNode);
@@ -163,8 +171,10 @@ d3.graphTheory = function(nodes, edges)
                 var vPosition = this.findNodePostionInNodeList(v["name"]);
                 
                 var alt = distances[this.findNodePostionInNodeList(u["name"])] + distanceBetweenNodes; // +1 
+                console.log("alt = "); 
+                console.log(alt);
                 
-                if ((alt < distances[vPosition]) || (distances[vPosition] === infinite))
+                if ((alt < distances[vPosition]) || (distances[vPosition] === infinity))
                 {
                     distances[v["name"]] = alt;
                     previous.push(u); 
@@ -173,7 +183,7 @@ d3.graphTheory = function(nodes, edges)
             }
             
             console.info("all neighbors = ");
-            console.log(closestNeighbor);
+            console.log(u);
             
         }
         console.log("after dijkstras. Distances = ");
@@ -182,8 +192,9 @@ d3.graphTheory = function(nodes, edges)
     };
 
     // Needs to be fixed to get the smallest distance NOT the closest neighbor.
-    // These are different.
-    this.getSmallestDistance = function(distances)
+    // These are different. 
+    // Also needs to be fixed to only iterate over the nodesToIterateOver, NOT all nodes.
+    this.getSmallestDistance = function(distances, nodesToIterateOver)
     {        
         var closestDistance = MAX_INT;
         var closestNode; 
@@ -193,14 +204,19 @@ d3.graphTheory = function(nodes, edges)
         console.log(distances);
         
         
-        for (var distancesIndex = 0; distancesIndex < distances.length; distancesIndex++)
+        for (var nodesToIterateOverIndex = 0; nodesToIterateOverIndex < distances.length; nodesToIterateOverIndex++)
         {
-            if ((distances[distancesIndex] !== infinity) && (distances[distancesIndex] < closestDistance))
+            var iteratingNode = nodesToIterateOver[nodesToIterateOverIndex];
+            console.log("iteratingNode = ");
+            console.log(iteratingNode);
+            var iteratingNodePositionInGlobalList = this.findNodePostionInNodeList(iteratingNode["name"]);
+            
+            if ((distances[iteratingNodePositionInGlobalList] !== infinity) && (distances[iteratingNodePositionInGlobalList] < closestDistance))
             {
-                closestDistance = distances[distancesIndex];
-                closestNode = this.nodes[distancesIndex];
+                closestDistance = distances[iteratingNodePositionInGlobalList];
+                closestNode = this.nodes[iteratingNodePositionInGlobalList];
                 console.log("\t\t distances[distancesIndex] = ");
-                console.log(distances[distancesIndex]);
+                console.log(distances[iteratingNodePositionInGlobalList]);
                 console.log("\t\tclosestDistance = ");
                 console.log(closestDistance);
             }
