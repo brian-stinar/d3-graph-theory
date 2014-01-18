@@ -168,15 +168,28 @@ d3.graphTheory = function(nodes, edges)
             for (var neightborIndex = 0; neightborIndex < neighbors.length; neightborIndex++)
             {
                 var v = neighbors[neightborIndex]; // Crappy name from psuedo-code implementation on wikipedia.
-                var vPosition = this.findNodePostionInNodeList(v["name"]);
-                
+                console.log("v = ");
+                console.log(v);
+                var vPosition = this.findNodePostionInNodeList(v);
+                console.log("vPosition = ");
+                console.log(vPosition);
+               
                 var alt = distances[this.findNodePostionInNodeList(u["name"])] + distanceBetweenNodes; // +1 
                 console.log("alt = "); 
                 console.log(alt);
                 
+                console.log("distances[vPosition] = ");
+                console.log(distances[vPosition]);
+                console.log("vPosition = ");
+                console.log(vPosition); // WRONG, I'm getting -1 here.
+                
                 if ((alt < distances[vPosition]) || (distances[vPosition] === infinity))
                 {
-                    distances[v["name"]] = alt;
+                    console.log("BEFORE SET distance[vPosition] = ");
+                    console.log(distances[vPosition]);
+                    distances[vPosition] = alt;
+                    console.log("AFTER SET distance[vPosition] = ");
+                    console.log(distances[vPosition]);
                     previous.push(u); 
                     // decrease-key v in Q;                           // Reorder v in the Queue // Not sure...?
                 }
