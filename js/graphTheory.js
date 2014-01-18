@@ -20,6 +20,7 @@ var distanceBetweenNodes = 1; // Will need to be redone for weighted graphs
 
 d3.graphTheory = function(nodes, edges)
 {
+    
     this.nodes = nodes; 
     this.edges = edges;
     
@@ -138,7 +139,7 @@ d3.graphTheory = function(nodes, edges)
             console.log("distances = ");
             console.log(distances);
             var u = this.getSmallestDistance(distances, nodesToIterateOver); // Crappy psuedo-code name - also wrong. It needs to get the smallest distance, not the closest neighbor. This is itself in case 1.
-            console.log("closestNode = ");
+            console.log("closestNode (u) = ");
             console.log(u);
             
             // Check the distance, to make sure it's non-infinite
@@ -164,14 +165,15 @@ d3.graphTheory = function(nodes, edges)
                 return;
             }
             
-            var neighbors = this.getAllNeighbors(sourceNode);
+            var neighbors = this.getAllNeighbors(u); // This was not set correctly - always only getting neighbors for the sourceNode. 
+            
             for (var neightborIndex = 0; neightborIndex < neighbors.length; neightborIndex++)
             {
                 var v = neighbors[neightborIndex]; // Crappy name from psuedo-code implementation on wikipedia.
-                console.log("v = ");
+                console.log("\t\t\tv = ");
                 console.log(v);
                 var vPosition = this.findNodePostionInNodeList(v);
-                console.log("vPosition = ");
+                console.log("\t\t\tvPosition = ");
                 console.log(vPosition);
                
                 var alt = distances[this.findNodePostionInNodeList(u["name"])] + distanceBetweenNodes; // +1 
@@ -185,11 +187,7 @@ d3.graphTheory = function(nodes, edges)
                 
                 if ((alt < distances[vPosition]) || (distances[vPosition] === infinity))
                 {
-                    console.log("BEFORE SET distance[vPosition] = ");
-                    console.log(distances[vPosition]);
                     distances[vPosition] = alt;
-                    console.log("AFTER SET distance[vPosition] = ");
-                    console.log(distances[vPosition]);
                     previous.push(u); 
                     // decrease-key v in Q;                           // Reorder v in the Queue // Not sure...?
                 }
@@ -212,15 +210,16 @@ d3.graphTheory = function(nodes, edges)
         var closestDistance = MAX_INT;
         var closestNode; 
         
-        console.log("inside getSmallestDistance()");
-        console.log("\tdistances = ");
+        console.log("inside getSmallestDistance()\tdistances = ");
         console.log(distances);
         
         
-        for (var nodesToIterateOverIndex = 0; nodesToIterateOverIndex < distances.length; nodesToIterateOverIndex++)
+        for (var nodesToIterateOverIndex = 0; nodesToIterateOverIndex < nodesToIterateOver.length; nodesToIterateOverIndex++)
         {
+            var closestNode;
+            
             var iteratingNode = nodesToIterateOver[nodesToIterateOverIndex];
-            console.log("iteratingNode = ");
+            console.log("inside getSmallestDistance()\titeratingNode = ");
             console.log(iteratingNode);
             var iteratingNodePositionInGlobalList = this.findNodePostionInNodeList(iteratingNode["name"]);
             
@@ -228,12 +227,19 @@ d3.graphTheory = function(nodes, edges)
             {
                 closestDistance = distances[iteratingNodePositionInGlobalList];
                 closestNode = this.nodes[iteratingNodePositionInGlobalList];
-                console.log("\t\t distances[distancesIndex] = ");
+                console.log("inside getSmallestDistance()\t\t distances[distancesIndex] = ");
                 console.log(distances[iteratingNodePositionInGlobalList]);
-                console.log("\t\tclosestDistance = ");
+                console.log("inside getSmallestDistance()\t\tclosestDistance = ");
                 console.log(closestDistance);
             }
         }
+        
+        if (closestNode === undefined)
+        {
+            console.log("ERROR! THIS SHOULDN'T HAPPEN!");
+            return;
+        }
+        
         return closestNode;
         
         //var closestNeighbor;
