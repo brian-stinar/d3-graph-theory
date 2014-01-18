@@ -1,9 +1,9 @@
 /* This is an attmept to build some graph theory logic into D3, using the
 datatypes for nodes / edges (links) that D3 uses. 
 
-This is for UNDIRECTED graphs only. If people like this, and want to pay me to 
-develop a directed graph version, I will. Otherwise, I think a undirected version
-will work for my current customer.
+This is for UNDIRECTED graphs only, with edge weights of 1.
+If people like this, and want to pay me to develop it further, I will. 
+Otherwise, I think a undirected version will work for my current customer.
 
 Brian J. Stinar
 Noventum Custom Software Development 
@@ -20,7 +20,6 @@ var distanceBetweenNodes = 1; // Will need to be redone for weighted graphs
 
 d3.graphTheory = function(nodes, edges)
 {
-    
     this.nodes = nodes; 
     this.edges = edges;
     
@@ -71,14 +70,19 @@ d3.graphTheory = function(nodes, edges)
     };
 
     
+    // This would be nice to add prettier-printing. I.E. to compensate for the
+    // length of the name in determining how many spaces to print. This looks good
+    // for single-character node names, but it will need adjustment for longer 
+    // named nodes.
     this.printAdjacencyList = function()
     {
         // Create labels based on node names
-        var columnsLabels = "        ";
+        var columnsLabels = "       ";
         for (var nodeIndex = 0; nodeIndex < this.nodes.length; nodeIndex++)
         {
-            columnsLabels += this.nodes[nodeIndex]["name"]  + "   ";
+            columnsLabels += this.nodes[nodeIndex]["name"]  + "      ";
         }
+        console.info(columnsLabels);
         
         // Print the contents of the list
         var outputString = "";
@@ -95,6 +99,7 @@ d3.graphTheory = function(nodes, edges)
         }
     };
     
+    
     // http://en.wikipedia.org/wiki/Dijkstra's_algorithm 
     // Edsger W. Dijkstra was a very cool mathematician.
     // If you don't know much about him, check out the wikipedia page
@@ -102,9 +107,6 @@ d3.graphTheory = function(nodes, edges)
     // http://en.wikipedia.org/wiki/Edsger_W._Dijkstra
     this.dijkstras = function(sourceNode)
     {
-        console.log("Start of dijkstras. sourceNode = ");
-
-        console.log(sourceNode);
         var sourceNodeIndex = this.findNodePostionInNodeList(sourceNode["name"]);
         
         if (sourceNodeIndex === -1)
@@ -114,9 +116,8 @@ d3.graphTheory = function(nodes, edges)
         }
         
         var distances = new Array(this.nodes.length);
-        var previous = new Array(this.nodes.length); // Previous node to undefined
+        var previous = new Array(this.nodes.length); // Previous node to undefined initially
         
-        // Initalize distances to infinity
         for (var nodeIndex = 0; nodeIndex < this.nodes.length; nodeIndex++)
         {
             distances[nodeIndex] = infinity;
@@ -124,36 +125,29 @@ d3.graphTheory = function(nodes, edges)
 
         distances[sourceNodeIndex] = 0;
 
-        console.log("initial distances = ");
-        console.log(distances);
-        
-        console.log("this.nodes = ");
-        console.log(this.nodes);
         var nodesToIterateOver = this.nodes.slice(0); // Copy the array. These both point to the same objects now.
-        console.log("nodesToIterateOver = ");
-        console.log(nodesToIterateOver);
-
         
         while (nodesToIterateOver.length > 0)
         {
-            console.log("distances = ");
-            console.log(distances);
-            var u = this.getSmallestDistance(distances, nodesToIterateOver); // Crappy psuedo-code name - also wrong. It needs to get the smallest distance, not the closest neighbor. This is itself in case 1.
-            console.log("closestNode (u) = ");
-            console.log(u);
+            // This would be good to change to avoid the 'undefined' return
+            // when we are finished. That would make it clearer.
+            var currentNode = this.getSmallestDistance(distances, nodesToIterateOver);
+            
+            if (currentNode === undefined)
+            {
+                console.log("Infinite distance returned undefined node for smallest distance... breaking");
+                break;
+            }
             
             // Check the distance, to make sure it's non-infinite
-            if (distances[this.findNodePostionInNodeList(u)] === infinity)
+            if (distances[this.findNodePostionInNodeList(currentNode)] === infinity)
             {
                 console.log("distance === infinity - exiting");
                 break;
             }
-            
+                        
             // Remove closestNeighbor from nodesToIterateOver
-            var indexOfRemoval = nodesToIterateOver.indexOf(u);
-            console.log("nodesToIterateOver = ");
-            console.log(nodesToIterateOver);
-            
+            var indexOfRemoval = nodesToIterateOver.indexOf(currentNode);
             if (indexOfRemoval > -1)
             {
                 nodesToIterateOver.splice(indexOfRemoval, 1);
@@ -165,36 +159,22 @@ d3.graphTheory = function(nodes, edges)
                 return;
             }
             
-            var neighbors = this.getAllNeighbors(u); // This was not set correctly - always only getting neighbors for the sourceNode. 
+            var neighbors = this.getAllNeighbors(currentNode);
             
             for (var neightborIndex = 0; neightborIndex < neighbors.length; neightborIndex++)
             {
-                var v = neighbors[neightborIndex]; // Crappy name from psuedo-code implementation on wikipedia.
-                console.log("\t\t\tv = ");
-                console.log(v);
-                var vPosition = this.findNodePostionInNodeList(v);
-                console.log("\t\t\tvPosition = ");
-                console.log(vPosition);
+                var currentNeighbor = neighbors[neightborIndex]; // Crappy name from psuedo-code implementation on wikipedia.
+                var currentNeighborPosition = this.findNodePostionInNodeList(currentNeighbor);
                
-                var alt = distances[this.findNodePostionInNodeList(u["name"])] + distanceBetweenNodes; // +1 
-                console.log("alt = "); 
-                console.log(alt);
+                var alt = distances[this.findNodePostionInNodeList(currentNode["name"])] + distanceBetweenNodes; // +1 
                 
-                console.log("distances[vPosition] = ");
-                console.log(distances[vPosition]);
-                console.log("vPosition = ");
-                console.log(vPosition); // WRONG, I'm getting -1 here.
-                
-                if ((alt < distances[vPosition]) || (distances[vPosition] === infinity))
+                if ((alt < distances[currentNeighborPosition]) || (distances[currentNeighborPosition] === infinity))
                 {
-                    distances[vPosition] = alt;
-                    previous.push(u); 
-                    // decrease-key v in Q;                           // Reorder v in the Queue // Not sure...?
+                    distances[currentNeighborPosition] = alt;
+                    previous.push(currentNode); 
+                    // decrease-key v in Q;                           // Reorder v in the Queue // Not sure what this is supposed to do...?
                 }
             }
-            
-            console.info("all neighbors = ");
-            console.log(u);
             
         }
         console.log("after dijkstras. Distances = ");
@@ -202,66 +182,35 @@ d3.graphTheory = function(nodes, edges)
         return;
     };
 
-    // Needs to be fixed to get the smallest distance NOT the closest neighbor.
-    // These are different. 
-    // Also needs to be fixed to only iterate over the nodesToIterateOver, NOT all nodes.
+
     this.getSmallestDistance = function(distances, nodesToIterateOver)
     {        
         var closestDistance = MAX_INT;
         var closestNode; 
-        
-        console.log("inside getSmallestDistance()\tdistances = ");
-        console.log(distances);
-        
-        
+                
         for (var nodesToIterateOverIndex = 0; nodesToIterateOverIndex < nodesToIterateOver.length; nodesToIterateOverIndex++)
         {
             var closestNode;
             
             var iteratingNode = nodesToIterateOver[nodesToIterateOverIndex];
-            console.log("inside getSmallestDistance()\titeratingNode = ");
-            console.log(iteratingNode);
             var iteratingNodePositionInGlobalList = this.findNodePostionInNodeList(iteratingNode["name"]);
             
             if ((distances[iteratingNodePositionInGlobalList] !== infinity) && (distances[iteratingNodePositionInGlobalList] < closestDistance))
             {
                 closestDistance = distances[iteratingNodePositionInGlobalList];
                 closestNode = this.nodes[iteratingNodePositionInGlobalList];
-                console.log("inside getSmallestDistance()\t\t distances[distancesIndex] = ");
-                console.log(distances[iteratingNodePositionInGlobalList]);
-                console.log("inside getSmallestDistance()\t\tclosestDistance = ");
-                console.log(closestDistance);
             }
         }
         
         if (closestNode === undefined)
         {
-            console.log("ERROR! THIS SHOULDN'T HAPPEN!");
+            console.log("Only infinite distances left. Returning undefined.");
             return;
         }
         
-        return closestNode;
-        
-        //var closestNeighbor;
-        //var currentSourceNodeIndex = this.findNodePostionInNodeList(currentSourceNode["name"]);
-        
-        /*
-        for (var neighborIndex = 0; neighborIndex < neighbors.length; neighborIndex++)
-        {
-            console.log("\tcurrentSourceNodeIndex = ");
-            console.log(currentSourceNodeIndex);
-            console.log("\tdistances[currentSourceNodeIndex] = ");
-            console.log(distances[currentSourceNodeIndex]);
-            if ((distances[currentSourceNodeIndex] !== infinity) && (distances[currentSourceNodeIndex] < closestNeighborDistance))
-            {
-                closestNeighbor = neighbors[neighborIndex];
-            }
-        }
-        console.log("Returning closestNeighbor=");
-        console.log(closestNeighbor);
-        return closestNeighbor;
-        */ 
+        return closestNode;        
     };
+    
     
     this.getAllNeighbors = function(sourceNode)
     {
@@ -283,6 +232,5 @@ d3.graphTheory = function(nodes, edges)
     this.buildUndirectedAdjacenyList();
     this.printAdjacencyList();
     
-    this.dijkstras(this.nodes[0]);
-
+    return this;
 };
