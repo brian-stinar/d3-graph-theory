@@ -238,6 +238,37 @@ d3.graphTheory = function(nodes, edges)
         }
         return neighborList;
     };
+    
+    
+    // http://en.wikipedia.org/wiki/Closeness_centrality
+    this.calculateClosenessCentrality = function()
+    {
+        // Every node needs to be the start node
+        this.closenessCentrality = new Array(this.nodes.length);
+        
+        for (nodeIndex in this.nodes)
+        {
+            // Calculate the distances, and then sum their inverse
+            var distances = this.dijkstras(this.nodes[nodeIndex]);
+            var closenessCentrality = 0; 
+            
+            for (distanceIndex in distances)
+            {
+                var distance = distances[distanceIndex];
+                var distanceInverse = 0;
+                if (distance === infinity)
+                {
+                    distanceInverse = 0; 
+                }
+                else 
+                {
+                    distanceInverse = 1 / distance; 
+                }
+                closenessCentrality += distanceInverse; 
+            }
+            closenessCentrality[nodeIndex] = closenessCentrality;
+        }
+    };
  
     
     this.buildUndirectedAdjacenyList();
