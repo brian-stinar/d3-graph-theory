@@ -88,31 +88,32 @@ function buildGraph(data)
         .data(edgesByPosition)
         .enter()
         .append('path')
-        .attr({'d': function(d) {return 'M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y},
+        .attr({'d': function(d) {return 'M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y;},
                'class':'edgepath',
                'fill-opacity':0,
                'stroke-opacity':0,
                'fill':'blue',
                'stroke':'red',
-               'id':function(d,i) {return 'edgepath'+i}})
+               'id':function(d,i) {return 'edgepath'+i;}})
         .style("pointer-events", "none");
 
+    // http://bl.ocks.org/jhb/5955887 for edge labels
     var edgelabels = svg.selectAll(".edgelabel")
         .data(edgesByPosition)
         .enter()
         .append('text')
         .style("pointer-events", "none")
         .attr({'class':'edgelabel',
-               'id':function(d,i){return 'edgelabel'+i},
+               'id':function(d,i){return 'edgelabel'+i;},
                'dx':80,
                'dy':0,
                'font-size':10,
                'fill':'#aaa'});
 
     edgelabels.append('textPath')
-        .attr('xlink:href',function(d,i) {return '#edgepath'+i})
+        .attr('xlink:href',function(d,i) {return '#edgepath'+i;})
         .style("pointer-events", "none")
-        .text(function(d,i){return 'label '+i});
+        .text(function(d,i){return 'label '+i;});
 
 
     function transformText(d) {
@@ -132,7 +133,7 @@ function buildGraph(data)
         text.attr("transform", transformText);
         
         edgepaths.attr('d', function(d) { var path='M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y;
-                return path});    
+                return path;});    
 
     });
 }
