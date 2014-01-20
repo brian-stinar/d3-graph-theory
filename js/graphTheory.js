@@ -243,24 +243,16 @@ d3.graphTheory = function(nodes, edges)
     {
         // Every node needs to be the start node
         this.closenessCentrality = new Array(this.nodes.length);
-        
-        for (var nodeIndex = 0; nodeIndex <= 0; nodeIndex++)
-        //for (nodeIndex in this.nodes)
+
+        // We want to calculate closeness centrality for every node
+        for (var nodeIndex in this.nodes)
         {
+            var distances = this.dijkstras(this.nodes[nodeIndex]);            
+            var closenessCentralityForIteratingNode = 0; 
+            
             // Calculate the distances, and then sum their inverse
-            var distances = this.dijkstras(this.nodes[nodeIndex]);
-            console.log("distances = ");
-            console.log(distances);
-            
-            var closenessCentrality = 0; 
-            
             for (distanceIndex in distances)
             {
-                console.log("distanceIndex = ");
-                console.log(distanceIndex);
-                console.log("distances[distanceIndex] = ");
-                console.log(distances[distanceIndex]);
-                
                 var distance = distances[distanceIndex];
                 
                 // We don't iterate over ourself. 
@@ -278,16 +270,12 @@ d3.graphTheory = function(nodes, edges)
                 {
                     var distanceInverse = 1 / parseFloat(distance); 
                 }
-                console.log("\tdistanceInverse = ");
-                console.log(distanceInverse);
-                console.log("\tclosenessCentrality = ");
-                console.log(closenessCentrality);
-                closenessCentrality = distanceInverse + closenessCentrality; 
+                closenessCentralityForIteratingNode = distanceInverse + closenessCentralityForIteratingNode; 
             }
-            closenessCentrality[nodeIndex] = closenessCentrality;
-            console.log("closeness centrality = ");
-            console.log(closenessCentrality);
+            this.closenessCentrality[nodeIndex] = closenessCentralityForIteratingNode;
         }
+        console.log("this.closenessCentrality = ");
+        console.log(this.closenessCentrality);
     };
  
     
