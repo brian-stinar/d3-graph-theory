@@ -62,7 +62,8 @@ d3.graphTheory = function(nodes, edges)
         // Edges is a listing of source->destination via node name
         // I need to get the indexof each element to figure out where
         // in the adjacency list things go
-        // This is an undirected graph.
+        // 
+        // This is an undirected graph. Hence the both ways connections
         for (var edgeIndex = 0; edgeIndex < this.edges.length; edgeIndex++)
         {
             var sourcePosition = this.findNodePostionInNodeList(this.edges[edgeIndex]["source"]);
@@ -239,7 +240,6 @@ d3.graphTheory = function(nodes, edges)
     
     this.buildUndirectedAdjacenyList();
     this.printAdjacencyList();
-    
     
     return this;
 };

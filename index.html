@@ -31,7 +31,7 @@
                
             for (edgeNumber in jsonRepresentation.edgeData)
             {
-                edges[edgeNumber] = {}
+                edges[edgeNumber] = {};
                 edges[edgeNumber]['source'] = jsonRepresentation.edgeData[edgeNumber].fromNode;
                 edges[edgeNumber]['target'] = jsonRepresentation.edgeData[edgeNumber].toNode;
             }        
@@ -62,37 +62,42 @@
         (
             function ()
             {
-                var usingXml = false;
+                var usingXml = true;
                 var data = {};
                 
                 if (usingXml)
                 {
-                    $.get('114.xml', function(d){
+                    $.get('104.xml', function(d){
 
                         var jsonRepresentation = $.xml2json(d);
+                        console.log(jsonRepresentation);
                         
                         data["edges"] = buildJsonEdges(jsonRepresentation);
                         data["nodes"] = buildJsonNodes(jsonRepresentation);
+                        
+                        setupGraph(data);
                     });
                 }
                
                 else
                 {
                     data = generateDoubleBox();
+                    setupGraph(data);
                 }
-
-                var graphTheory = d3.graphTheory(data["nodes"], data["edges"]);
-                var source = data["nodes"][2];
-                source["type"] = "source";
-                graphTheory.dijkstras(source);
-                console.log("source['name'] = ");
-                console.log(source['name']);
-                
-                buildGraph(data);
-
             }
         );
 
+        function setupGraph(data)
+        {
+            var graphTheory = d3.graphTheory(data["nodes"], data["edges"]);
+            var source = data["nodes"][2];
+            source["type"] = "source";
+            graphTheory.dijkstras(source);
+            console.log("source['name'] = ");
+            console.log(source['name']);
+
+            buildGraph(data);
+        }
         
         function generateDoubleBox()
         {
