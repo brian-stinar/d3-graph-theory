@@ -183,8 +183,6 @@ d3.graphTheory = function(nodes, edges)
             }
             
         }
-        console.log("after dijkstras. Distances = ");
-        console.log(distances);
         
         for (nodeIndex in this.nodes)
         {
@@ -246,33 +244,56 @@ d3.graphTheory = function(nodes, edges)
         // Every node needs to be the start node
         this.closenessCentrality = new Array(this.nodes.length);
         
-        for (nodeIndex in this.nodes)
+        for (var nodeIndex = 0; nodeIndex <= 0; nodeIndex++)
+        //for (nodeIndex in this.nodes)
         {
             // Calculate the distances, and then sum their inverse
             var distances = this.dijkstras(this.nodes[nodeIndex]);
+            console.log("distances = ");
+            console.log(distances);
+            
             var closenessCentrality = 0; 
             
             for (distanceIndex in distances)
             {
+                console.log("distanceIndex = ");
+                console.log(distanceIndex);
+                console.log("distances[distanceIndex] = ");
+                console.log(distances[distanceIndex]);
+                
                 var distance = distances[distanceIndex];
-                var distanceInverse = 0;
+                
+                // We don't iterate over ourself. 
+                if (distance === 0)
+                {
+                    continue;
+                }
+                
                 if (distance === infinity)
                 {
-                    distanceInverse = 0; 
+                    var distanceInverse = 0; 
                 }
+                
                 else 
                 {
-                    distanceInverse = 1 / distance; 
+                    var distanceInverse = 1 / parseFloat(distance); 
                 }
-                closenessCentrality += distanceInverse; 
+                console.log("\tdistanceInverse = ");
+                console.log(distanceInverse);
+                console.log("\tclosenessCentrality = ");
+                console.log(closenessCentrality);
+                closenessCentrality = distanceInverse + closenessCentrality; 
             }
             closenessCentrality[nodeIndex] = closenessCentrality;
+            console.log("closeness centrality = ");
+            console.log(closenessCentrality);
         }
     };
  
     
     this.buildUndirectedAdjacenyList();
     this.printAdjacencyList();
+    this.calculateClosenessCentrality();
     
     return this;
 };
