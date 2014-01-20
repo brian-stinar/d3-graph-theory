@@ -182,7 +182,12 @@ d3.graphTheory = function(nodes, edges)
         }
         console.log("after dijkstras. Distances = ");
         console.log(distances);
-        return;
+        
+        for (nodeIndex in this.nodes)
+        {
+            this.nodes[nodeIndex]["distance"] = distances[nodeIndex];
+        }
+        return distances;
     };
 
 

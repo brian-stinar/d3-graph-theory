@@ -82,7 +82,7 @@ function buildGraph(data)
         .enter().append("text")
         .attr("x", 10)
         .attr("y", ".31em")
-        .text(function(d) { return d.name; });
+        .text(function(d) { return d.name + "  distance : " + d.distance; });
 
     var edgepaths = svg.selectAll(".edgepath")
         .data(edgesByPosition)
