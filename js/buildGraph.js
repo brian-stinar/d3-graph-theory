@@ -43,8 +43,6 @@ function buildGraph(data)
         .attr("r", 10)
         .style("fill", function(d, i) {
             
-            // Have this conditional on the type of node
-            
             if (d.type === "1") // Hypothesis / Belief
             {
                  return d3.rgb(255, 10, 200);   
@@ -54,6 +52,22 @@ function buildGraph(data)
             {
                  return d3.rgb(200, 10, 10);   
             }
+            
+            if (d.type === "source")
+            {
+                return d3.rgb(0, 255, 0);
+            }
+            
+            if (d.type === "unvisited")
+            {
+                return d3.rgb(0, 0 ,0);
+            }
+            
+            if (d.type === "visited")
+            {
+                return d3.rgb(255, 255, 255);
+            }
+            
             else
             {
                 return colors(i);

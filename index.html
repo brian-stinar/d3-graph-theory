@@ -80,13 +80,16 @@
                 {
                     data = generateDoubleBox();
                 }
-                buildGraph(data);
 
                 var graphTheory = d3.graphTheory(data["nodes"], data["edges"]);
                 var source = data["nodes"][2];
+                source["type"] = "source";
                 graphTheory.dijkstras(source);
                 console.log("source['name'] = ");
                 console.log(source['name']);
+                
+                buildGraph(data);
+
             }
         );
 
@@ -94,7 +97,7 @@
         function generateDoubleBox()
         {
             var data = generateSixRingGraph();
-            data["edges"].push({"source" : "6", "target" : "3"});
+            data["edges"].push({"source" : "6", "target" : "3", "type" : "unvisited"});
             return data;
         }
         
@@ -108,6 +111,11 @@
                 {"source" : "1", "target" : "2"}, {"source" : "2", "target" : "3"}, {"source" : "3", "target" : "4"},
                 {"source" : "4", "target" : "5"}, {"source" : "5", "target" : "6"}, {"source" : "6", "target" : "1"}
             ];
+            
+            for (node in data["nodes"])
+            {
+                data["nodes"][node]["type"] = "unvisited";
+            }
             
             return data;
         }
