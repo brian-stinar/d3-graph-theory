@@ -42,12 +42,12 @@ d3.graphTheory = function(nodes, edges)
     // This representation is needed for basically all following graph algoriths
     this.buildUndirectedAdjacenyList = function()
     {
-        this.adjaceyList = new Array(this.nodes.length);
+        this.undirectedAdjaceyList = new Array(this.nodes.length);
         
         // Make our array-of-arrays
         for (var rowIndex = 0; rowIndex < this.nodes.length; rowIndex++)
         {
-            this.adjaceyList[rowIndex] = new Array(this.nodes.length);
+            this.undirectedAdjaceyList[rowIndex] = new Array(this.nodes.length);
         }
         
         // Initalize the array of arrays to all zeros
@@ -55,7 +55,7 @@ d3.graphTheory = function(nodes, edges)
         {
             for (var columnIndex = 0; columnIndex < this.nodes.length; columnIndex++)
             {
-                this.adjaceyList[rowIndex][columnIndex] = 0;            
+                this.undirectedAdjaceyList[rowIndex][columnIndex] = 0;            
             }
         }
         
@@ -63,13 +63,15 @@ d3.graphTheory = function(nodes, edges)
         // I need to get the indexof each element to figure out where
         // in the adjacency list things go
         // 
-        // This is an undirected graph. Hence the both ways connections
+        // This is an undirected graph. Hence the both ways connections.
+        // I should also make this adjacency list store the edge weight (1) 
+        // instead of the name of the target.
         for (var edgeIndex = 0; edgeIndex < this.edges.length; edgeIndex++)
         {
             var sourcePosition = this.findNodePostionInNodeList(this.edges[edgeIndex]["source"]);
             var targetPosition = this.findNodePostionInNodeList(this.edges[edgeIndex]["target"]);
-            this.adjaceyList[sourcePosition][targetPosition] = this.nodes[targetPosition]["name"];
-            this.adjaceyList[targetPosition][sourcePosition] = this.nodes[sourcePosition]["name"];            
+            this.undirectedAdjaceyList[sourcePosition][targetPosition] = this.nodes[targetPosition]["name"];
+            this.undirectedAdjaceyList[targetPosition][sourcePosition] = this.nodes[sourcePosition]["name"];            
         }
     };
 
@@ -96,7 +98,7 @@ d3.graphTheory = function(nodes, edges)
             outputString = this.nodes[rowIndex]["name"];
             for (var columnIndex = 0; columnIndex < this.nodes.length; columnIndex++)
             {
-                outputString+= "      " + this.adjaceyList[rowIndex][columnIndex];
+                outputString+= "      " + this.undirectedAdjaceyList[rowIndex][columnIndex];
             }
             console.info(outputString);
             outputString = "";
@@ -225,13 +227,13 @@ d3.graphTheory = function(nodes, edges)
     {
         var currentSourceNodeIndex = this.findNodePostionInNodeList(sourceNode["name"]);
         
-        var adjacencyList = this.adjaceyList[currentSourceNodeIndex];
+        var adjacencyList = this.undirectedAdjaceyList[currentSourceNodeIndex];
         var neighborList = new Array();
         for (var nodeIndex = 0; nodeIndex < adjacencyList.length; nodeIndex++)
         {
             if (adjacencyList[nodeIndex] !== 0)
             {
-                neighborList.push(adjacencyList[nodeIndex]); // Push the node name, or the node itself. These different indexes will eventually jack me up.
+                neighborList.push(adjacencyList[nodeIndex]); // Careful with these different indexes
             }
         }
         return neighborList;
