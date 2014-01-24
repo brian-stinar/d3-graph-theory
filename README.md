@@ -23,8 +23,12 @@ There are many, many cool graph theory algorithms that would be fun to implement
 I love graph theory, and D3 is probably the coolest JavaScript library I've used. I'd like to continue to expand d3-graph-theory, but I have to pay by billz. Luckily, I have a customer that has a great need for something like this, and has agreed to allow me to open source my work (provided I can partition it off well from their main code base.) I am an independent software developer, hustling for customers. If you like this library, and want to PAY me to expand it, please get in touch with me.
 
 ##References
-D3 - The Coolest JavaScript Library Ever (http://d3js.org/) 
-Dijkstra's Algorithm (http://en.wikipedia.org/wiki/Dijkstra's_algorithm)
-Closeness Centrality (http://en.wikipedia.org/wiki/Centrality#Closeness_centrality)
-Aaron Torres - My Friend That Told Me About The Benifits of GitHub (https://github.com/agtorre/)
-Noventum - My Contracting Company (http://www.noventum.us/)
+[D3] (http://d3js.org/) - The Coolest JavaScript Library Ever
+
+[Dijkstra's Algorithm] (http://en.wikipedia.org/wiki/Dijkstra's_algorithm)
+
+[Closeness Centrality] (http://en.wikipedia.org/wiki/Centrality#Closeness_centrality)
+
+[Aaron Torres] (https://github.com/agtorre/) - My Friend That Told Me About The Benifits of GitHub 
+
+[Noventum] (http://www.noventum.us/) - My Contracting Company 
