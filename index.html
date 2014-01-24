@@ -1,3 +1,14 @@
+<!--
+This file is used for providing examples of my graph theory work with the D3 
+datastructures as input.
+
+Brian J. Stinar
+Noventum Custom Software Development 
+2014.01.13
+505-750-1169  - Call me if you want to talk or have questions. 
+I like that more than email. 
+-->
+
 <!DOCTYPE html>
 <html>
   <head>    
@@ -27,7 +38,7 @@
         
         function buildJsonEdges(jsonRepresentation)
         {
-            var edges = [];
+            var edges = []; 
                
             for (edgeNumber in jsonRepresentation.edgeData)
             {
@@ -62,7 +73,7 @@
         (
             function ()
             {
-                var usingXml = false;
+                var usingXml = true;
                 var data = {};
                 
                 if (usingXml)
