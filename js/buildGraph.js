@@ -40,8 +40,7 @@ function buildGraph(data)
         .charge([-2000])  
         .start();
 
-    // Remove this if not interested in directional markings
-    svg.append("svg:defs").selectAll("marker")
+    svg.append("svg:defs").selectAll("marker")  // Remove this if not interested in directional markings
         .data(["arrow"])
         .enter().append("svg:marker")
         .attr("id", String)
@@ -74,7 +73,8 @@ function buildGraph(data)
         .enter()
         .append("circle")
         .attr("r", 10)
-        .style("fill", function(d, i) {
+        .style("fill", function(d, i) 
+        {
             
             if (d.type === "1") // Hypothesis / Belief
             {
@@ -115,7 +115,8 @@ function buildGraph(data)
         .attr("y", ".31em")
         .text(function(d) { return d.name + "  distance : " + d.distance; });
 
-    function transformText(d) {
+    function transformText(d) 
+    {
         return "translate(" + d.x + 1000 + "," + d.y + ")";
     }
             
@@ -129,7 +130,6 @@ function buildGraph(data)
         nodes.attr("cx", function(d) { return d.x; })
             .attr("cy", function(d) { return d.y; });
 
-        text.attr("transform", transformText);
-        
+        text.attr("transform", transformText);  
     });
 }
