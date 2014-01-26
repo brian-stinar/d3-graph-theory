@@ -18,7 +18,9 @@ function buildGraph(data)
         // Get the source and target nodes
         var sourceNode = data.nodes.filter(function(n) { return n.name === e.source; })[0],
         targetNode = data.nodes.filter(function(n) { return n.name   === e.target; })[0];
+        
         edgesByPosition.push({"source": sourceNode, "target": targetNode, "weight": 1}); // Add the edge to the array
+        edgesByPosition.push({"source": targetNode, "target": sourceNode , "weight": 1}); // Delete this if we only have single directionaly edges.
     });
     
     var force = d3.layout.force()
@@ -48,7 +50,7 @@ function buildGraph(data)
         .enter()
         .append("svg:line")
         .attr("class", "link arrow")
-        .attr("marker-end", "url(#arrow)")
+        .attr("marker-end", "url(#arrow)");
         
         /*
         .style("stroke", "#ccc")
