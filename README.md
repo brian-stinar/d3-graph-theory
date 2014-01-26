@@ -16,7 +16,6 @@ See index.html for an example. The calculated distances are shown as labels for 
 
 ##Where Do We Go From Here?
 I plan on implementing graph partitioning very soon. 
-My internal representation of an adjacency list could use some work. I would like to make that more in line with what graph theory books use. 
 I would like to handle directed graphs, and different weights.
 There are many, many cool graph theory algorithms that would be fun to implement in JavaScript.
 
