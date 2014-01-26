@@ -29,12 +29,31 @@ function buildGraph(data)
         .charge([-2000])  
         .start();
 
+    // Remove this if not interested in directional markings
+    svg.append("svg:defs").selectAll("marker")
+        .data(["arrow"])
+        .enter().append("svg:marker")
+        .attr("id", String)
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 10)
+        .attr("refY", 0)
+        .attr("markerWidth", 10)
+        .attr("markerHeight", 10)
+        .attr("orient", "auto")
+        .append("svg:path")
+        .attr("d", "M0,-5L10,0L0,0");
+
     var edges = svg.selectAll("line")
         .data(edgesByPosition)
         .enter()
-        .append("line")
+        .append("svg:line")
+        .attr("class", "link arrow")
+        .attr("marker-end", "url(#arrow)");
+        /*
         .style("stroke", "#ccc")
-        .style("stroke-width", 1);
+        .style("stroke-width", 1)
+        .attr("class", "link arrow")
+        .attr("marker-end", "url(#arrow)");;*/
 
     edges.append("text").text("hi");
 
