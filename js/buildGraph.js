@@ -49,7 +49,7 @@ function buildGraph(data)
         .append("svg:line")
         .attr("class", "link arrow")
         .attr("marker-end", "url(#arrow)")
-        .attr("marker-start", "url(#arrow)");
+        
         /*
         .style("stroke", "#ccc")
         .style("stroke-width", 1)
