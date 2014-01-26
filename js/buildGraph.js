@@ -1,3 +1,12 @@
+/*
+ * This is the code for building a graph representation using D3. 
+ * 
+    Brian J. Stinar
+    Noventum Custom Software Development 
+    505-750-1169  - Call me if you want to talk or have questions. 
+    I like that more than email. 
+ */
+
 function buildGraph(data)
 {
     var w = 1000;
