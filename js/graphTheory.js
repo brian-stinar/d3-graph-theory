@@ -277,11 +277,50 @@ d3.graphTheory = function(nodes, edges)
         console.log("this.closenessCentrality = ");
         console.log(this.closenessCentrality);
     };
+    
+    
+    // infinite looping... Still needs some work.
+    this.detectDisjointSubgraphs = function()
+    {
+        // Create a copy of the nodes list
+        var nodesToIterateOver = this.nodes.slice(0);
+        
+        var collectionOfSets = new Array(); // Where we'll store all the results.
+        
+        while (nodesToIterateOver.length > 0)
+        {
+            var disjointSubgraph = new Array(); 
+            
+            var nodeToIterateOver = nodesToIterateOver[0]; // Use the first node in the list
+            var distances = this.dijkstras(nodeToIterateOver);
+            
+            for (var nodeIndex = 0; nodeIndex < distances.length; nodeIndex++)
+            {
+                if (distances[nodeIndex] !== infinity)
+                {
+                    disjointSubgraph.push(nodesToIterateOver[nodeIndex]);
+                    var indexToRemove = nodesToIterateOver;
+                    nodesToIterateOver.slice(indexToRemove,1);
+                }
+            }
+            
+            collectionOfSets.push(disjointSubgraph);
+        }
+        // While that nodes list has any elemeents in it, 
+        // recursively get the adjacency lists, and remove everything
+        // from the nodes list.
+        
+        // Every time I've exhausted all nodes from 
+        
+        return collectionOfSets;
+    };
  
     
     this.buildUndirectedAdjacenyList();
     this.printAdjacencyList();
     this.calculateClosenessCentrality();
+    var disjointSets = this.detectDisjointSubgraphs();
+    console.log(disjointSets);
     
     return this;
 };
