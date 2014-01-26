@@ -70,8 +70,8 @@ d3.graphTheory = function(nodes, edges)
         {
             var sourcePosition = this.findNodePostionInNodeList(this.edges[edgeIndex]["source"]);
             var targetPosition = this.findNodePostionInNodeList(this.edges[edgeIndex]["target"]);
-            this.undirectedAdjaceyList[sourcePosition][targetPosition] = this.nodes[targetPosition]["name"];
-            this.undirectedAdjaceyList[targetPosition][sourcePosition] = this.nodes[sourcePosition]["name"];            
+            this.undirectedAdjaceyList[sourcePosition][targetPosition] = 1;
+            this.undirectedAdjaceyList[targetPosition][sourcePosition] = 1;            
         }
     };
 
@@ -231,7 +231,7 @@ d3.graphTheory = function(nodes, edges)
         {
             if (adjacencyList[nodeIndex] !== 0)
             {
-                neighborList.push(adjacencyList[nodeIndex]); // Careful with these different indexes
+                neighborList.push(this.nodes[nodeIndex]["name"]); // Careful with these different indexes
             }
         }
         return neighborList;
