@@ -41,6 +41,47 @@ function buildJsonNodes(jsonRepresentation)
     return nodes;
 }
 
+        
+function generateDoubleBox()
+{
+    var data = generateSixRingGraph();
+    data["edges"].push({"source" : "6", "target" : "3", "type" : "unvisited"});
+    return data;
+}
+        
+        
+function generateSixRingGraph()
+{
+    var data = {};
+    data["nodes"] = [{"name":"0"}, {"name":"1"}, {"name":"2"}, {"name":"3"}, {"name":"4"}, {"name":"5"}, {"name":"6"}];
+    data["edges"] =  
+    [
+        {"source" : "1", "target" : "2"}, {"source" : "2", "target" : "3"}, {"source" : "3", "target" : "4"},
+        {"source" : "4", "target" : "5"}, {"source" : "5", "target" : "6"}, {"source" : "6", "target" : "1"}
+    ];
+
+    for (node in data["nodes"])
+    {
+        data["nodes"][node]["type"] = "unvisited";
+    }
+
+    return data;
+}
+
+
+function setupGraph(data)
+{
+    var graphTheory = d3.graphTheory(data["nodes"], data["edges"]);
+    var source = data["nodes"][2];
+    source["type"] = "source";
+    graphTheory.dijkstras(source);
+    console.log("source['name'] = ");
+    console.log(source['name']);
+
+    buildGraph(data);
+}
+
+
 function buildGraph(data)
 {
     var w = 1000;
