@@ -7,12 +7,14 @@ The D3-graph-theory project is to use basic graph theory (Dijkstra's, and closen
 ##Features 
 - Dijkstra's shortest path algorithm used to calculate distances between nodes.
 - Closeness centrality calculations which use the inverse of distance
+- Disjoint subgraph detection
 - XML node/edge list -> D3 datastructure examples
 - Adjacency list creation from D3 data structures to use in implementing other graph theory algorithms
 
 
 ##Examples
-See index.html for an example. The calculated distances are shown as labels for the nodes. Closeness centrality is output to the console.
+See index.html for an example of the use of Dijkstra's . The calculated distances are shown as labels for the nodes. Closeness centrality is output to the console.
+See DisconnectSubgraphDetection.html for an example of, guess what, disconnected subgraph detection.
 
 ##Where Do We Go From Here?
 I plan on implementing graph partitioning very soon. 
