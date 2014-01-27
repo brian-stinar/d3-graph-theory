@@ -1,0 +1,14 @@
+/* Styling for D3 graphs */
+
+.node 
+{
+    fill: #ff0000;
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+
+.link 
+{
+    stroke: #aaa;
+    stroke-width: 1.5px;
+}
