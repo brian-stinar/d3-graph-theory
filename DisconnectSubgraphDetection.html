@@ -1,0 +1,28 @@
+<!-- 
+    This page is for demonstrating the disjoint subgraph 
+-->
+<html>
+    <head>
+        <title>Disjoint Subgraph Identification Example</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/graphStyle.css">
+        <script type="text/javascript" src="js/libs/d3/d3.v3.min.js"></script>
+        <script type="text/javascript" src="js/libs/jquery/jquery.js"></script>
+        <script type="text/javascript" src="js/buildGraph.js"></script>
+        <script type="text/javascript" src="js/graphTheory.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+
+            $(document).ready
+            (
+                function ()
+                {
+                    var data = generateFourSubgraphs();
+                    runSubgraphDetection(data);
+                }
+            );
+        </script>        
+    </body>
+</html>
