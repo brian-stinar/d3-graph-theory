@@ -1,11 +1,45 @@
 /*
- * This is the code for building a graph representation using D3. 
+ * This is the code for building a graph representation using D3.
+ * The initial code if for transforming an XML representation I use 
+ * into D3's representation. The stuff following that is for normal D3 layouts
  * 
     Brian J. Stinar
     Noventum Custom Software Development 
     505-750-1169  - Call me if you want to talk or have questions. 
     I like that more than email. 
  */
+
+function buildJsonEdges(jsonRepresentation)
+{
+    var edges = []; 
+
+    for (edgeNumber in jsonRepresentation.edgeData)
+    {
+        edges[edgeNumber] = {};
+        edges[edgeNumber]['source'] = jsonRepresentation.edgeData[edgeNumber].fromNode;
+        edges[edgeNumber]['target'] = jsonRepresentation.edgeData[edgeNumber].toNode;
+    }        
+    return edges;
+}
+        
+        
+function buildJsonNodes(jsonRepresentation)
+{
+    var nodes = [];
+
+    for (nodeNumber in jsonRepresentation.nodeData)
+    {
+        nodes[nodeNumber] = {};
+        nodes[nodeNumber].name = jsonRepresentation.nodeData[nodeNumber].nodeId;
+        // There will need to be a reckoning between D3 names and our names. 
+        // These 'names' are more like our IDs.
+        nodes[nodeNumber].description = jsonRepresentation.nodeData[nodeNumber].description;
+        nodes[nodeNumber].type = jsonRepresentation.nodeData[nodeNumber].type;
+
+        //console.info(jsonRepresentation.nodeData[nodeNumber]);
+    }
+    return nodes;
+}
 
 function buildGraph(data)
 {
@@ -60,14 +94,9 @@ function buildGraph(data)
         .attr("class", "link arrow")
         .attr("marker-end", "url(#arrow)");
         
-        /*
-        .style("stroke", "#ccc")
-        .style("stroke-width", 1)
-        .attr("class", "link arrow")
-        .attr("marker-end", "url(#arrow)");;*/
-
     edges.append("text").text("hi");
 
+    // TODO: abstract this out. I don't need 400-line functions
     var nodes = svg.selectAll("circle")
         .data(data.nodes)
         .enter()
