@@ -14,6 +14,7 @@ The D3-graph-theory project is to use basic graph theory (Dijkstra's, and closen
 
 ##Examples
 See index.html for an example of the use of Dijkstra's . The calculated distances are shown as labels for the nodes. Closeness centrality is output to the console.
+
 See DisconnectSubgraphDetection.html for an example of, guess what, disconnected subgraph detection.
 
 ##Where Do We Go From Here?
