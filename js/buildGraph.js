@@ -84,7 +84,25 @@ function generateSixRingGraph()
 }
 
 
-function setupGraph(data)
+function runSubgraphDetection(data)
+{
+    var graphTheory = d3.graphTheory(data["nodes"], data["edges"]);
+    var disjointSets = graphTheory.detectDisjointSubgraphs(); 
+    
+    for (var setIndex in disjointSets)
+    {
+        console.log("setIndex = " + setIndex);
+        for (var nodeIndex in disjointSets[setIndex])
+        {
+            console.log("nodeIndex = " + nodeIndex);
+            disjointSets[setIndex][nodeIndex]["type"] = setIndex;
+        }
+    }
+    
+    buildGraph(data);
+}
+
+function runDijkstras(data)
 {
     var graphTheory = d3.graphTheory(data["nodes"], data["edges"]);
     var source = data["nodes"][2];
@@ -162,18 +180,16 @@ function buildGraph(data)
         {
             switch (d.type)
             {
+                case "source":
+                    return d3.rgb(0, 255, 0);
+                case "visited" :
+                    return d3.rgb(255, 255, 255);
                 case "1": // Believe, or cluster 1
                     return d3.rgb(255, 10, 200);
                 case "2": // Action, or cluster 2
                     return d3.rgb(200, 10, 10);   
-                case "source":
-                    return d3.rgb(0, 255, 0);
-                case "non-source":
-                    return d3.rgb(0, 0 ,0);
-                case "visited" :
-                    return d3.rgb(255, 255, 255);
                 default:
-                    return colors(i);
+                    return colors(d.type);
             }
 
         })

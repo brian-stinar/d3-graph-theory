@@ -320,9 +320,11 @@ d3.graphTheory = function(nodes, edges)
     this.printAdjacencyList();
     this.calculateClosenessCentrality();
 
+    /* 
     var disjointSets = this.detectDisjointSubgraphs();
     console.log("disjointSets = ");
     console.log(disjointSets);
+    */
     
     return this;
 };

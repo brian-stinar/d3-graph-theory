@@ -27,7 +27,7 @@ I like that more than email.
         (
             function ()
             {
-                var usingXml = false;
+                var usingXml = true;
                 var data = {};
                 
                 if (usingXml)
@@ -40,14 +40,14 @@ I like that more than email.
                         data["edges"] = buildJsonEdges(jsonRepresentation);
                         data["nodes"] = buildJsonNodes(jsonRepresentation);
                         
-                        setupGraph(data);
+                        runDijkstras(data);
                     });
                 }
                
                 else
                 {
                     data = generateDoubleBox();
-                    setupGraph(data);
+                    runDijkstras(data);
                 }
             }
         );
