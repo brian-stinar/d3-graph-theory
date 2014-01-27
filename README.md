@@ -17,7 +17,6 @@ See index.html for an example of the use of Dijkstra's . The calculated distance
 See DisconnectSubgraphDetection.html for an example of, guess what, disconnected subgraph detection.
 
 ##Where Do We Go From Here?
-I plan on implementing graph partitioning very soon. 
 I would like to handle directed graphs, and different weights.
 There are many, many cool graph theory algorithms that would be fun to implement in JavaScript.
 
