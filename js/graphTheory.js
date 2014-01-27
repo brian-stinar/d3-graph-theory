@@ -278,7 +278,9 @@ d3.graphTheory = function(nodes, edges)
     };
     
     
-    // Wrong answer... Still needs some work.
+    // O(something big?) This will run dijkstras once per disjoint subgraph. 
+    // This is something like vertex^3 I think is the worst-case, but that 
+    // is for a fully disconnected graph.
     this.detectDisjointSubgraphs = function()
     {
         // Create a copy of the nodes list
@@ -288,31 +290,21 @@ d3.graphTheory = function(nodes, edges)
         
         while (nodesToIterateOver.length > 0)
         {   
-            console.log("Making new array");
             var disjointSubgraph = new Array(); 
 
             var nodeToIterateOver = nodesToIterateOver[0]; // Use the first node in the list
-            disjointSubgraph.push(nodeToIterateOver); // and add it to the list of things adjacent to the first node
-            console.log("disjointSubgraph = ");
-            console.log(disjointSubgraph);
-            
+            disjointSubgraph.push(nodeToIterateOver); // and add it to the list of things adjacent to the first node            
             // since it is adjacent to itself.
-            nodesToIterateOver.splice(0, 1); // Remove that first node, since we're already taking care of it.
-            console.log("\t\tnodesToIterateOver = "); 
-            console.log(nodesToIterateOver);
             
-            var distances = this.dijkstras(nodeToIterateOver);
+            nodesToIterateOver.splice(0, 1); // Remove that first node, since we're already taking care of it.
+            
+            var distances = this.dijkstras(nodeToIterateOver); // We know what is reachable from our node. 
             
             for (var nodeIndex = 0; nodeIndex < distances.length; nodeIndex++)
-            {
-                console.log("nodeIndex = " + nodeIndex);
-                console.log("distances[nodeIndex] = " + distances[nodeIndex]);
-                
+            {                
                 if ((distances[nodeIndex] !== infinity) && (distances[nodeIndex] !== 0))
-                {
-                    console.log("\tpushing to array");
-                    
-                    disjointSubgraph.push(this.nodes[nodeIndex]); // This isn't right. It needs to be the index of the nodes list.
+                {                    
+                    disjointSubgraph.push(this.nodes[nodeIndex]);
                     var indexToRemove = nodesToIterateOver.indexOf(this.nodes[nodeIndex]);
                     nodesToIterateOver.splice(indexToRemove, 1); // the reachable node
                 }
@@ -327,6 +319,7 @@ d3.graphTheory = function(nodes, edges)
     this.buildUndirectedAdjacenyList();
     this.printAdjacencyList();
     this.calculateClosenessCentrality();
+
     var disjointSets = this.detectDisjointSubgraphs();
     console.log("disjointSets = ");
     console.log(disjointSets);
