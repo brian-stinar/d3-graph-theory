@@ -41,6 +41,21 @@ function buildJsonNodes(jsonRepresentation)
     return nodes;
 }
 
+function generateFourSubgraphs()
+{
+    var data = generateSixRingGraph();
+    
+    data["nodes"].push({"name" : "7"}, {"name" : "8"}, {"name" : "9"}, {"name" : "10"});
+    data["edges"].push({"source" : "7", "target" : "8"}, {"source" : "7", "target" : "9"}, {"source" : "7", "target" : "10"});
+
+    data["nodes"].push({"name" : "11"}, {"name" : "12"}, {"name" : "13"}, {"name" : "14"});
+    data["edges"].push({"source" : "11", "target" : "12"}, {"source" : "11", "target" : "13"}, {"source" : "11", "target" : "14"});
+    data["edges"].push({"source" : "12", "target" : "11"}, {"source" : "12", "target" : "13"}, {"source" : "12", "target" : "14"});
+    data["edges"].push({"source" : "13", "target" : "14"});
+
+    
+    return data;
+};
         
 function generateDoubleBox()
 {
@@ -84,8 +99,8 @@ function setupGraph(data)
 
 function buildGraph(data)
 {
-    var w = 1000;
-    var h = 600;
+    var w = 1280;
+    var h = 1024;
 
     var svg = d3.select("body")
       .append("svg")
@@ -112,7 +127,7 @@ function buildGraph(data)
         .links(edgesByPosition)
         .size([w, h])
         .linkDistance([100])
-        .charge([-2000])  
+        .charge([-1500])  
         .start();
 
     svg.append("svg:defs").selectAll("marker")  // Remove this if not interested in directional markings
@@ -145,36 +160,22 @@ function buildGraph(data)
         .attr("r", 10)
         .style("fill", function(d, i) 
         {
-            
-            if (d.type === "1") // Hypothesis / Belief
+            switch (d.type)
             {
-                 return d3.rgb(255, 10, 200);   
+                case "1": // Believe, or cluster 1
+                    return d3.rgb(255, 10, 200);
+                case "2": // Action, or cluster 2
+                    return d3.rgb(200, 10, 10);   
+                case "source":
+                    return d3.rgb(0, 255, 0);
+                case "non-source":
+                    return d3.rgb(0, 0 ,0);
+                case "visited" :
+                    return d3.rgb(255, 255, 255);
+                default:
+                    return colors(i);
             }
-    
-            if (d.type === "2") // Action
-            {
-                 return d3.rgb(200, 10, 10);   
-            }
-            
-            if (d.type === "source")
-            {
-                return d3.rgb(0, 255, 0);
-            }
-            
-            if (d.type === "unvisited")
-            {
-                return d3.rgb(0, 0 ,0);
-            }
-            
-            if (d.type === "visited")
-            {
-                return d3.rgb(255, 255, 255);
-            }
-            
-            else
-            {
-                return colors(i);
-            }
+
         })
         .call(force.drag);
         
