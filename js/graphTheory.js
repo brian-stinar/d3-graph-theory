@@ -141,7 +141,7 @@ d3.graphTheory = function(nodes, edges)
             
             if (currentNode === undefined)
             {
-                console.log("Infinite distance returned undefined node for smallest distance... breaking");
+                // console.log("Infinite distance returned undefined node for smallest distance... breaking");
                 break;
             }
             
@@ -213,7 +213,6 @@ d3.graphTheory = function(nodes, edges)
         
         if (closestNode === undefined)
         {
-            console.log("Only infinite distances left. Returning undefined.");
             return;
         }
         
@@ -274,12 +273,12 @@ d3.graphTheory = function(nodes, edges)
             }
             this.closenessCentrality[nodeIndex] = closenessCentralityForIteratingNode;
         }
-        console.log("this.closenessCentrality = ");
-        console.log(this.closenessCentrality);
+        // console.log("this.closenessCentrality = ");
+        // console.log(this.closenessCentrality);
     };
     
     
-    // infinite looping... Still needs some work.
+    // Wrong answer... Still needs some work.
     this.detectDisjointSubgraphs = function()
     {
         // Create a copy of the nodes list
@@ -288,30 +287,39 @@ d3.graphTheory = function(nodes, edges)
         var collectionOfSets = new Array(); // Where we'll store all the results.
         
         while (nodesToIterateOver.length > 0)
-        {
+        {   
+            console.log("Making new array");
             var disjointSubgraph = new Array(); 
-            
+
             var nodeToIterateOver = nodesToIterateOver[0]; // Use the first node in the list
+            disjointSubgraph.push(nodeToIterateOver); // and add it to the list of things adjacent to the first node
+            console.log("disjointSubgraph = ");
+            console.log(disjointSubgraph);
+            
+            // since it is adjacent to itself.
+            nodesToIterateOver.splice(0, 1); // Remove that first node, since we're already taking care of it.
+            console.log("\t\tnodesToIterateOver = "); 
+            console.log(nodesToIterateOver);
+            
             var distances = this.dijkstras(nodeToIterateOver);
             
             for (var nodeIndex = 0; nodeIndex < distances.length; nodeIndex++)
             {
-                if (distances[nodeIndex] !== infinity)
+                console.log("nodeIndex = " + nodeIndex);
+                console.log("distances[nodeIndex] = " + distances[nodeIndex]);
+                
+                if ((distances[nodeIndex] !== infinity) && (distances[nodeIndex] !== 0))
                 {
-                    disjointSubgraph.push(nodesToIterateOver[nodeIndex]);
-                    var indexToRemove = nodesToIterateOver;
-                    nodesToIterateOver.slice(indexToRemove,1);
+                    console.log("\tpushing to array");
+                    
+                    disjointSubgraph.push(this.nodes[nodeIndex]); // This isn't right. It needs to be the index of the nodes list.
+                    var indexToRemove = nodesToIterateOver.indexOf(this.nodes[nodeIndex]);
+                    nodesToIterateOver.splice(indexToRemove, 1); // the reachable node
                 }
             }
             
             collectionOfSets.push(disjointSubgraph);
-        }
-        // While that nodes list has any elemeents in it, 
-        // recursively get the adjacency lists, and remove everything
-        // from the nodes list.
-        
-        // Every time I've exhausted all nodes from 
-        
+        }        
         return collectionOfSets;
     };
  
@@ -320,6 +328,7 @@ d3.graphTheory = function(nodes, edges)
     this.printAdjacencyList();
     this.calculateClosenessCentrality();
     var disjointSets = this.detectDisjointSubgraphs();
+    console.log("disjointSets = ");
     console.log(disjointSets);
     
     return this;

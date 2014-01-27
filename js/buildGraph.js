@@ -18,7 +18,7 @@ function buildGraph(data)
       .attr("height", h);
 
     var colors = d3.scale.category10();
-    console.log(data);
+    // console.log(data);
 
     var edgesByPosition = [];
             
