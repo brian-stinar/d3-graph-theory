@@ -102,6 +102,21 @@ function runSubgraphDetection(data)
     buildGraph(data);
 }
 
+
+// For using other visualization routines (i.e. graph-visualization) 
+// https://github.com/davidpiegza/Graph-Visualization/blob/master/index_example.html
+// It is nice to have disjoint sections connected, so they do not fly off into infinity
+function joinDisjointSections()
+{
+    // create a new virtual node, with datatype of "virtual"
+    
+    // Get the different disjoint sections
+    
+    // For each disjoint section
+    //   Attach the first node to the virtual node, with an invisible edge 
+    
+}
+
 function runDijkstras(data)
 {
     var graphTheory = d3.graphTheory(data["nodes"], data["edges"]);
