@@ -195,12 +195,31 @@ function buildGraph(data)
         })
         .call(force.drag);
         
-    var text = svg.append("g").selectAll("text")
+    var text = buildTextFromDescription(); 
+    
+    function buildTextFromDescription()
+    {        
+        var svg = d3.select("svg");
+        
+        return svg.append("g").selectAll("text")
         .data(force.nodes())
         .enter().append("text")
         .attr("x", 10)
         .attr("y", ".31em")
-        .text(function(d) { return d.name + "  distance : " + d.distance; });
+        .text(function(d) { return d.description;});
+    }
+    
+    function buildTextFromDistance()
+    {
+        var svg = d3.select("svg");
+        
+        return svg.append("g").selectAll("text")
+        .data(force.nodes())
+        .enter().append("text")
+        .attr("x", 10)
+        .attr("y", ".31em")
+        .text(function(d) { return d.name + "  distance : " + d.distance; })
+    }
 
     function transformText(d) 
     {
