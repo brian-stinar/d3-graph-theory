@@ -32,7 +32,7 @@ I like that more than email.
                 
                 if (usingXml)
                 {
-                    $.get('104.xml', function(d){
+                    $.get('112.xml', function(d){
 
                         var jsonRepresentation = $.xml2json(d);
                         console.log(jsonRepresentation);
@@ -40,7 +40,8 @@ I like that more than email.
                         data["edges"] = buildJsonEdges(jsonRepresentation);
                         data["nodes"] = buildJsonNodes(jsonRepresentation);
                         
-                        runDijkstras(data);
+                        // runDijkstras(data);
+                        buildGraph(data);
                     });
                 }
                
