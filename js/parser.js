@@ -14,18 +14,18 @@ function Parser(jsonRepresentation)
     var m_jsonRepresentation = jsonRepresentation;
     this.data = {};
     
-    this.data["edges"] = buildJsonEdges();
-    this.data["nodes"] = buildJsonNodes();
+    this.data["edges"] = buildJsonEdges(m_jsonRepresentation);
+    this.data["nodes"] = buildJsonNodes(m_jsonRepresentation);
     
     function buildJsonEdges(m_jsonRepresentation)
     {
         var edges = []; 
 
-        for (edgeNumber in jsonRepresentation.edgeData)
+        for (edgeNumber in m_jsonRepresentation.edgeData)
         {
             edges[edgeNumber] = {};
-            edges[edgeNumber]['source'] = jsonRepresentation.edgeData[edgeNumber].fromNode;
-            edges[edgeNumber]['target'] = jsonRepresentation.edgeData[edgeNumber].toNode;
+            edges[edgeNumber]['source'] = m_jsonRepresentation.edgeData[edgeNumber].fromNode;
+            edges[edgeNumber]['target'] = m_jsonRepresentation.edgeData[edgeNumber].toNode;
         }        
         return edges;
     }
@@ -37,14 +37,12 @@ function Parser(jsonRepresentation)
         for (nodeNumber in jsonRepresentation.nodeData)
         {
             nodes[nodeNumber] = {};
-            nodes[nodeNumber].name = jsonRepresentation.nodeData[nodeNumber].nodeId;
+            nodes[nodeNumber].name = m_jsonRepresentation.nodeData[nodeNumber].nodeId;
             // There will need to be a reckoning between D3 names and our names. 
             // These 'names' are more like our IDs.
-            nodes[nodeNumber].description = jsonRepresentation.nodeData[nodeNumber].description;
-            nodes[nodeNumber].type = jsonRepresentation.nodeData[nodeNumber].type;
-
-            //console.info(jsonRepresentation.nodeData[nodeNumber]);
+            nodes[nodeNumber].description = m_jsonRepresentation.nodeData[nodeNumber].description;
+            nodes[nodeNumber].type = m_jsonRepresentation.nodeData[nodeNumber].type;
         }
         return nodes;
     }
-}
+};
