@@ -11,7 +11,7 @@
         <script type="text/javascript" src="../js/libs/jquery/jquery.js"></script>
         <script type="text/javascript" src="../js/buildGraph.js"></script>
         <script type="text/javascript" src="../js/graphTheory.js"></script>
-        <script type="text/javascript" src="../js/globalMethods.js"></script>
+        <script type="text/javascript" src="../js/runner.js"></script>
         <script type="text/javascript" src="../js/generateGraphStructure.js"></script>
     </head>
     <body>
@@ -22,7 +22,7 @@
                 function ()
                 {
                     var data = new Generator().generateFourSubgraphs();
-                    runSubgraphDetection(data);
+                    new Runner(data).runSubgraphDetection();
                 }
             );
         </script>        

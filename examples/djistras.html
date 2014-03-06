@@ -20,7 +20,7 @@ I like that more than email.
     <script type="text/javascript" src="../js/buildGraph.js"></script>
     <script type="text/javascript" src="../js/graphTheory.js"></script>
     <script type="text/javascript" src="../js/xmlParser.js"></script>
-    <script type="text/javascript" src="../js/globalMethods.js"></script>
+    <script type="text/javascript" src="../js/runner.js"></script>
   </head>
   <body>
       
@@ -32,8 +32,8 @@ I like that more than email.
                 $.get('../104.xml', function(d)
                 {
                     var jsonRepresentation = $.xml2json(d);
-                    var data = new Parser(jsonRepresentation).data;                         
-                    runDijkstras(data);
+                    var data = new Parser(jsonRepresentation).data; 
+                    new Runner(data).runDijkstras();
                 });
             }
         );
