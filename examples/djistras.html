@@ -28,13 +28,11 @@ I like that more than email.
         (
             function ()
             {
-                var data = {};
-                
-                $.get('../112.xml', function(d)
+                $.get('../104.xml', function(d)
                 {
                     var jsonRepresentation = $.xml2json(d);
-                    var data = new Parser(jsonRepresentation).data; 
-                    buildGraph(data);
+                    var data = new Parser(jsonRepresentation).data;                         
+                    runDijkstras(data);
                 });
             }
         );
@@ -42,4 +40,3 @@ I like that more than email.
        </script>
       
   </body>
-</html>

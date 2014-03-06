@@ -9,38 +9,6 @@
     I like that more than email. 
  */
 
-function buildJsonEdges(jsonRepresentation)
-{
-    var edges = []; 
-
-    for (edgeNumber in jsonRepresentation.edgeData)
-    {
-        edges[edgeNumber] = {};
-        edges[edgeNumber]['source'] = jsonRepresentation.edgeData[edgeNumber].fromNode;
-        edges[edgeNumber]['target'] = jsonRepresentation.edgeData[edgeNumber].toNode;
-    }        
-    return edges;
-}
-        
-        
-function buildJsonNodes(jsonRepresentation)
-{
-    var nodes = [];
-
-    for (nodeNumber in jsonRepresentation.nodeData)
-    {
-        nodes[nodeNumber] = {};
-        nodes[nodeNumber].name = jsonRepresentation.nodeData[nodeNumber].nodeId;
-        // There will need to be a reckoning between D3 names and our names. 
-        // These 'names' are more like our IDs.
-        nodes[nodeNumber].description = jsonRepresentation.nodeData[nodeNumber].description;
-        nodes[nodeNumber].type = jsonRepresentation.nodeData[nodeNumber].type;
-
-        //console.info(jsonRepresentation.nodeData[nodeNumber]);
-    }
-    return nodes;
-}
-
 function generateFourSubgraphs()
 {
     var data = generateSixRingGraph();
@@ -126,12 +94,28 @@ function runDijkstras(data)
     console.log("source['name'] = ");
     console.log(source['name']);
 
-    buildGraph(data);
+    var graph = buildGraph(data);
+    graph.buildTextFromDistance();
 }
 
-
+// TODO: Remove all the gloabls from this file. This should be the only thing in here.
 function buildGraph(data)
 {
+    this.buildTextFromDescription = function()
+    {        
+        svg.selectAll("text").text(function(d) { return d.description; });
+    };
+    
+    this.buildTextFromDistance = function()
+    {
+        svg.selectAll("text").text(function(d) { return d.distance + "  distance : " + d.distance; });
+    };
+
+    function transformText(d) 
+    {
+        return "translate(" + d.x + 1000 + "," + d.y + ")";
+    };
+    
     var w = 1280;
     var h = 1024;
 
@@ -141,7 +125,6 @@ function buildGraph(data)
       .attr("height", h);
 
     var colors = d3.scale.category10();
-    // console.log(data);
 
     var edgesByPosition = [];
             
@@ -210,37 +193,12 @@ function buildGraph(data)
         })
         .call(force.drag);
         
-    var text = buildTextFromDescription(); 
-    
-    function buildTextFromDescription()
-    {        
-        var svg = d3.select("svg");
-        
-        return svg.append("g").selectAll("text")
+    var text =  svg.append("g").selectAll("text")
         .data(force.nodes())
         .enter().append("text")
         .attr("x", 10)
-        .attr("y", ".31em")
-        .text(function(d) { return d.description;});
-    }
+        .attr("y", ".31em");
     
-    function buildTextFromDistance()
-    {
-        var svg = d3.select("svg");
-        
-        return svg.append("g").selectAll("text")
-        .data(force.nodes())
-        .enter().append("text")
-        .attr("x", 10)
-        .attr("y", ".31em")
-        .text(function(d) { return d.name + "  distance : " + d.distance; })
-    }
-
-    function transformText(d) 
-    {
-        return "translate(" + d.x + 1000 + "," + d.y + ")";
-    }
-            
     force.on("tick", function() 
     {
         edges.attr("x1", function(d) { return d.source.x; })
@@ -253,4 +211,7 @@ function buildGraph(data)
 
         text.attr("transform", transformText);  
     });
+
+    this.buildTextFromDescription(); // Default behavior, which gets over-written by Djesktra's
+    return this;
 }
