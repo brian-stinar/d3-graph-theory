@@ -46,5 +46,5 @@ function Runner(data)
 
         var graph = buildGraph(m_data);
         graph.buildTextFromDistance();
-    }
+    };
 }
