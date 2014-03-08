@@ -12,17 +12,19 @@ Noventum Custom Software Development
 I like that more than email. 
 */
 
+// BIG TODO: Not 100% everything needs to be publicly exposes. I can make 
+// some of these methods private.
 // TODO: Make the source node one color, and all the other nodes another color.
 // TODO: Figure out how to print distances, maybe after the node name? 
 
-var infinity = "infinity";
-
-// http://stackoverflow.com/questions/307179/what-is-javascripts-max-int-whats-the-highest-integer-value-a-number-can-go-t
-var MAX_INT = Math.pow(2, 53); 
-var distanceBetweenNodes = 1; // Will need to be redone for weighted graphs
-
 d3.graphTheory = function(nodes, edges)
 {
+    var infinity = "infinity";
+
+    // http://stackoverflow.com/questions/307179/what-is-javascripts-max-int-whats-the-highest-integer-value-a-number-can-go-t
+    var MAX_INT = Math.pow(2, 53); 
+    var distanceBetweenNodes = 1; // Will need to be redone for weighted graphs
+    
     this.nodes = nodes; 
     this.edges = edges;
     
@@ -316,15 +318,24 @@ d3.graphTheory = function(nodes, edges)
     };
  
     
+    // This is will change the structure of the graph by adding nodes and edges
+    // between disjoint sections. The output will be an adjacency list. 
+    // 
+    // This makes me realize that I need to be able to go from adjacency list 
+    // -> d3 structure. All of the previous graph theory impacted properties of 
+    // the nodes, which didn't require structural changes. 
+    
+    // Honestly though, this will only add one one, and then an edge for each
+    // disjoint set. Also, I'm not 100% sure which node within the disjoint set
+    // should be combined. 
+    this.combineDisjointSets = function(disjointSets)
+    {
+        
+    };
+    
     this.buildUndirectedAdjacenyList();
     this.printAdjacencyList();
     this.calculateClosenessCentrality();
 
-    /* 
-    var disjointSets = this.detectDisjointSubgraphs();
-    console.log("disjointSets = ");
-    console.log(disjointSets);
-    */
-    
     return this;
 };
