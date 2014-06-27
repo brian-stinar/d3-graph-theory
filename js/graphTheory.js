@@ -40,8 +40,28 @@ d3.graphTheory = function(nodes, edges)
         return -1; 
     };
 
+    this.makeFullyConnected = function()
+    {
+        edges = []; // Blow out the old edge list
+        // Initalize the array of arrays to all ones AND add the connectivity information D3 needs
+        for (var rowIndex = 0; rowIndex < nodes.length; rowIndex++)
+        {
+            var sourceID = nodes[rowIndex]['name'];
+            
+            for (var columnIndex = 0; columnIndex < nodes.length; columnIndex++)
+            {
+                var targetId = nodes[columnIndex]['name'];
+                edges.push({'source': sourceID, 'target' : targetId});
+                
+                this.undirectedAdjaceyList[rowIndex][columnIndex] = 1;
+            }
+        }
+        console.log(edges);
+    };
+    
     
     // This representation is needed for basically all following graph algoriths
+    // I can also make this private. 
     this.buildUndirectedAdjacenyList = function()
     {
         this.undirectedAdjaceyList = new Array(this.nodes.length);
@@ -334,7 +354,7 @@ d3.graphTheory = function(nodes, edges)
     };
     
     this.buildUndirectedAdjacenyList();
-    this.printAdjacencyList();
+    // this.printAdjacencyList();
     this.calculateClosenessCentrality();
 
     return this;

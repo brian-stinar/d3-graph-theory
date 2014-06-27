@@ -1,0 +1,47 @@
+<!--
+This file is used for providing (an) example(s) of my graph theory work with the D3 
+datastructures as input.
+
+Brian J. Stinar
+Noventum Custom Software Development 
+2014.01.13
+505-750-1169  - Call me if you want to talk or have questions. 
+I like that more than email. 
+-->
+
+<!DOCTYPE html>
+<html>
+  <head>  
+     <link rel="stylesheet" type="text/css" href="../css/graphStyle.css">
+    <title></title>
+    <script type="text/javascript" src="../js/libs/d3/d3.v3.min.js"></script>
+    <script type="text/javascript" src="../js/libs/jquery/jquery.js"></script>
+    <script src="http://jquery-xml2json-plugin.googlecode.com/svn/trunk/jquery.xml2json.js"></script>
+    <script type="text/javascript" src="../js/buildGraph.js"></script>
+    <script type="text/javascript" src="../js/graphTheory.js"></script>
+    <script type="text/javascript" src="../js/xmlParser.js"></script>
+    <script type="text/javascript" src="../js/runner.js"></script>
+
+  </head>
+  <body>
+      
+      <script type="text/javascript"> 
+        $(document).ready
+        (
+            function ()
+            {
+                var data = {};
+                
+                $.get('../112.xml', function(d)
+                {
+                    var jsonRepresentation = $.xml2json(d);
+                    var data = new Parser(jsonRepresentation).data; 
+                    new Runner(data).runFullyConnected();
+                });
+            }
+        );
+
+       </script>
+      
+  </body>
+</html>

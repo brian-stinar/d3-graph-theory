@@ -47,4 +47,15 @@ function Runner(data)
         var graph = buildGraph(m_data);
         graph.buildTextFromDistance();
     };
+    
+    this.runFullyConnected = function()
+    {
+        var graphTheory = d3.graphTheory(m_data["nodes"], m_data["edges"]);
+        
+        graphTheory.makeFullyConnected();
+        
+        var graph = buildGraph(m_data);
+        //graph.buildTextFromDistance();
+    };
+    
 }
