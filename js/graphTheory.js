@@ -333,22 +333,7 @@ d3.graphTheory = function(nodes, edges)
         return collectionOfSets;
     };
  
-    
-    // This is will change the structure of the graph by adding nodes and edges
-    // between disjoint sections. The output will be an adjacency list. 
-    // 
-    // This makes me realize that I need to be able to go from adjacency list 
-    // -> d3 structure. All of the previous graph theory impacted properties of 
-    // the nodes, which didn't require structural changes. 
-    
-    // Honestly though, this will only add one one, and then an edge for each
-    // disjoint set. Also, I'm not 100% sure which node within the disjoint set
-    // should be combined. 
-    this.combineDisjointSets = function(disjointSets)
-    {
-        
-    };
-    
+ 
     buildUndirectedAdjacenyList();
     calculateClosenessCentrality();
 
