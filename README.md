@@ -29,7 +29,7 @@ fullyConnected.html makes the graph from brianGoals2014.02.17 fully connected.
 I would like to handle directed graphs, and different weights.
 There are many, many cool graph theory algorithms that would be fun to implement in JavaScript.
 
-I love graph theory, and D3 is probably the coolest JavaScript library I've used. I'd like to continue to expand d3-graph-theory, but I have to pay by billz. Luckily, I have a customer that has a great need for something like this, and has agreed to allow me to open source my work (provided I can partition it off well from their main code base.) I am an independent software developer, hustling for customers. If you like this library, and want to PAY me to expand it, please get in touch with me.
+I love graph theory, and D3 is probably the coolest JavaScript library I've used. I'd like to continue to expand d3-graph-theory, but I have to pay by billz. Luckily, I have a customer that has a great need for something like this, and has agreed to allow me to open source my work (provided I can partition it off well from their main code base.) I am an independent software developer, hustling for customers. If you like this library, and want to PAY me to expand it, please get in touch with me. This is what I do for a job.
 
 ##References
 [D3] (http://d3js.org/) - The Coolest JavaScript Library Ever
