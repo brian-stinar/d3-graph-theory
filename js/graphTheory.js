@@ -18,13 +18,11 @@ I like that more than email.
 d3.graphTheory = function(nodes, edges)
 {
     var infinity = "infinity";
+    var self = this; // So private methods can access this
 
     // http://stackoverflow.com/questions/307179/what-is-javascripts-max-int-whats-the-highest-integer-value-a-number-can-go-t
     var MAX_INT = Math.pow(2, 53); 
     var distanceBetweenNodes = 1; // Will need to be redone for weighted graphs
-    
-    //this.nodes = nodes; 
-    //this.edges = edges;
     
     this.findNodePostionInNodeList = function(nodeName)
     {
@@ -40,8 +38,9 @@ d3.graphTheory = function(nodes, edges)
 
     this.makeFullyConnected = function()
     {
-        //this.edges = []; // Broke ass 
+        //this.edges = []; // Creates a local copy. Not 100% sure why? 
         edges.length = 0; // Works
+        
         // Initalize the array of arrays to all ones AND add the connectivity information D3 needs
         for (var rowIndex = 0; rowIndex < nodes.length; rowIndex++)
         {
@@ -60,15 +59,14 @@ d3.graphTheory = function(nodes, edges)
     
     
     // This representation is needed for basically all following graph algoriths
-    // I can also make this private. 
-    this.buildUndirectedAdjacenyList = function()
+    function buildUndirectedAdjacenyList()
     {
-        this.undirectedAdjaceyList = new Array(nodes.length);
+        self.undirectedAdjaceyList = new Array(nodes.length);
         
         // Make our array-of-arrays
         for (var rowIndex = 0; rowIndex < nodes.length; rowIndex++)
         {
-            this.undirectedAdjaceyList[rowIndex] = new Array(nodes.length);
+            self.undirectedAdjaceyList[rowIndex] = new Array(nodes.length);
         }
         
         // Initalize the array of arrays to all zeros
@@ -76,7 +74,7 @@ d3.graphTheory = function(nodes, edges)
         {
             for (var columnIndex = 0; columnIndex < nodes.length; columnIndex++)
             {
-                this.undirectedAdjaceyList[rowIndex][columnIndex] = 0;            
+                self.undirectedAdjaceyList[rowIndex][columnIndex] = 0;            
             }
         }
         
@@ -89,10 +87,10 @@ d3.graphTheory = function(nodes, edges)
         // instead of the name of the target.
         for (var edgeIndex = 0; edgeIndex < edges.length; edgeIndex++)
         {
-            var sourcePosition = this.findNodePostionInNodeList(edges[edgeIndex]["source"]);
-            var targetPosition = this.findNodePostionInNodeList(edges[edgeIndex]["target"]);
-            this.undirectedAdjaceyList[sourcePosition][targetPosition] = 1;
-            this.undirectedAdjaceyList[targetPosition][sourcePosition] = 1;            
+            var sourcePosition = self.findNodePostionInNodeList(edges[edgeIndex]["source"]);
+            var targetPosition = self.findNodePostionInNodeList(edges[edgeIndex]["target"]);
+            self.undirectedAdjaceyList[sourcePosition][targetPosition] = 1;
+            self.undirectedAdjaceyList[targetPosition][sourcePosition] = 1;            
         }
     };
 
@@ -201,13 +199,12 @@ d3.graphTheory = function(nodes, edges)
                     previous.push(currentNode); 
                     // decrease-key v in Q;                           // Reorder v in the Queue // Not sure what this is supposed to do...?
                 }
-            }
-            
+            }  
         }
         
-        for (nodeIndex in this.nodes)
+        for (nodeIndex in nodes)
         {
-            this.nodes[nodeIndex]["distance"] = distances[nodeIndex];
+            nodes[nodeIndex]["distance"] = distances[nodeIndex];
         }
         return distances;
     };
@@ -259,16 +256,18 @@ d3.graphTheory = function(nodes, edges)
     
     
     // http://en.wikipedia.org/wiki/Closeness_centrality
-    this.calculateClosenessCentrality = function()
+    function calculateClosenessCentrality()
     {
         // Every node needs to be the start node
-        this.closenessCentrality = new Array(nodes.length);
+        self.closenessCentrality = new Array(nodes.length);
 
         // We want to calculate closeness centrality for every node
         for (var nodeIndex in nodes)
         {
-            var distances = this.dijkstras(nodes[nodeIndex]);            
+            var distances = self.dijkstras(nodes[nodeIndex]);            
             var closenessCentralityForIteratingNode = 0; 
+            
+            var distanceInverse;
             
             // Calculate the distances, and then sum their inverse
             for (distanceIndex in distances)
@@ -283,19 +282,17 @@ d3.graphTheory = function(nodes, edges)
                 
                 if (distance === infinity)
                 {
-                    var distanceInverse = 0; 
+                    distanceInverse = 0; 
                 }
                 
                 else 
                 {
-                    var distanceInverse = 1 / parseFloat(distance); 
+                    distanceInverse = 1 / parseFloat(distance); 
                 }
                 closenessCentralityForIteratingNode = distanceInverse + closenessCentralityForIteratingNode; 
             }
-            this.closenessCentrality[nodeIndex] = closenessCentralityForIteratingNode;
+            self.closenessCentrality[nodeIndex] = closenessCentralityForIteratingNode;
         }
-        // console.log("this.closenessCentrality = ");
-        // console.log(this.closenessCentrality);
     };
     
     
@@ -352,9 +349,8 @@ d3.graphTheory = function(nodes, edges)
         
     };
     
-    this.buildUndirectedAdjacenyList();
-    // this.printAdjacencyList();
-    this.calculateClosenessCentrality();
+    buildUndirectedAdjacenyList();
+    calculateClosenessCentrality();
 
     return this;
 };
