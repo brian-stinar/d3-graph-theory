@@ -13,9 +13,17 @@ The D3-graph-theory project is to use basic graph theory (Dijkstra's, and closen
 
 
 ##Examples
-See index.html for an example of the use of Dijkstra's . The calculated distances are shown as labels for the nodes. Closeness centrality is output to the console.
+All the examples live in the examples/ directory. 
+
+I tried to name these (and everything!) in a way that the names make sense. 
+
+See dijkstras.html for an example of the use of Dijkstra's . The calculated distances are shown as labels for the nodes. Closeness centrality is output to the console.
 
 See DisconnectSubgraphDetection.html for an example of, guess what, disconnected subgraph detection.
+
+brianGoals2014.02.17.html shows parsing an XML structure into the structures D3 expects. 
+
+fullyConnected.html makes the graph from brianGoals2014.02.17 fully connected.
 
 ##Where Do We Go From Here?
 I would like to handle directed graphs, and different weights.
