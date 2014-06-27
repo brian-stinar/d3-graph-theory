@@ -50,6 +50,7 @@ function Runner(data)
     
     this.runFullyConnected = function()
     {
+        //var graphTheory = d3.graphTheory({"nodes": m_data["nodes"], "edges": m_data["edges"]});
         var graphTheory = d3.graphTheory(m_data["nodes"], m_data["edges"]);
         
         graphTheory.makeFullyConnected();

@@ -17,6 +17,7 @@ I like that more than email.
 // TODO: Make the source node one color, and all the other nodes another color.
 // TODO: Figure out how to print distances, maybe after the node name? 
 
+//d3.graphTheory = function(graph)
 d3.graphTheory = function(nodes, edges)
 {
     var infinity = "infinity";
@@ -42,21 +43,22 @@ d3.graphTheory = function(nodes, edges)
 
     this.makeFullyConnected = function()
     {
-        edges = []; // Blow out the old edge list
+        //this.edges = []; // Broke ass 
+        this.edges.length = 0; // Works
         // Initalize the array of arrays to all ones AND add the connectivity information D3 needs
-        for (var rowIndex = 0; rowIndex < nodes.length; rowIndex++)
+        for (var rowIndex = 0; rowIndex < this.nodes.length; rowIndex++)
         {
-            var sourceID = nodes[rowIndex]['name'];
+            var sourceID = this.nodes[rowIndex]['name'];
             
-            for (var columnIndex = 0; columnIndex < nodes.length; columnIndex++)
+            for (var columnIndex = 0; columnIndex < this.nodes.length; columnIndex++)
             {
-                var targetId = nodes[columnIndex]['name'];
-                edges.push({'source': sourceID, 'target' : targetId});
+                var targetId = this.nodes[columnIndex]['name'];
+                this.edges.push({'source': sourceID, 'target' : targetId});
                 
                 this.undirectedAdjaceyList[rowIndex][columnIndex] = 1;
             }
         }
-        console.log(edges);
+        console.log(this.edges);
     };
     
     
