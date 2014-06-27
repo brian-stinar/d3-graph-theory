@@ -8,7 +8,6 @@
  */
 
 
-
 function Runner(data)
 {
     var m_data = data;

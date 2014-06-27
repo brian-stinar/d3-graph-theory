@@ -14,10 +14,7 @@ I like that more than email.
 
 // BIG TODO: Not 100% everything needs to be publicly exposes. I can make 
 // some of these methods private.
-// TODO: Make the source node one color, and all the other nodes another color.
-// TODO: Figure out how to print distances, maybe after the node name? 
 
-//d3.graphTheory = function(graph)
 d3.graphTheory = function(nodes, edges)
 {
     var infinity = "infinity";
@@ -26,14 +23,14 @@ d3.graphTheory = function(nodes, edges)
     var MAX_INT = Math.pow(2, 53); 
     var distanceBetweenNodes = 1; // Will need to be redone for weighted graphs
     
-    this.nodes = nodes; 
-    this.edges = edges;
+    //this.nodes = nodes; 
+    //this.edges = edges;
     
     this.findNodePostionInNodeList = function(nodeName)
     {
-        for (var nodeIndex = 0; nodeIndex < this.nodes.length; nodeIndex++)
+        for (var nodeIndex = 0; nodeIndex < nodes.length; nodeIndex++)
         {
-            if (this.nodes[nodeIndex]["name"] === nodeName)
+            if (nodes[nodeIndex]["name"] === nodeName)
             {
                 return nodeIndex;
             }
@@ -44,21 +41,21 @@ d3.graphTheory = function(nodes, edges)
     this.makeFullyConnected = function()
     {
         //this.edges = []; // Broke ass 
-        this.edges.length = 0; // Works
+        edges.length = 0; // Works
         // Initalize the array of arrays to all ones AND add the connectivity information D3 needs
-        for (var rowIndex = 0; rowIndex < this.nodes.length; rowIndex++)
+        for (var rowIndex = 0; rowIndex < nodes.length; rowIndex++)
         {
-            var sourceID = this.nodes[rowIndex]['name'];
+            var sourceID = nodes[rowIndex]['name'];
             
-            for (var columnIndex = 0; columnIndex < this.nodes.length; columnIndex++)
+            for (var columnIndex = 0; columnIndex < nodes.length; columnIndex++)
             {
-                var targetId = this.nodes[columnIndex]['name'];
-                this.edges.push({'source': sourceID, 'target' : targetId});
+                var targetId = nodes[columnIndex]['name'];
+                edges.push({'source': sourceID, 'target' : targetId});
                 
                 this.undirectedAdjaceyList[rowIndex][columnIndex] = 1;
             }
         }
-        console.log(this.edges);
+        console.log(edges);
     };
     
     
@@ -66,18 +63,18 @@ d3.graphTheory = function(nodes, edges)
     // I can also make this private. 
     this.buildUndirectedAdjacenyList = function()
     {
-        this.undirectedAdjaceyList = new Array(this.nodes.length);
+        this.undirectedAdjaceyList = new Array(nodes.length);
         
         // Make our array-of-arrays
-        for (var rowIndex = 0; rowIndex < this.nodes.length; rowIndex++)
+        for (var rowIndex = 0; rowIndex < nodes.length; rowIndex++)
         {
-            this.undirectedAdjaceyList[rowIndex] = new Array(this.nodes.length);
+            this.undirectedAdjaceyList[rowIndex] = new Array(nodes.length);
         }
         
         // Initalize the array of arrays to all zeros
-        for (var rowIndex = 0; rowIndex < this.nodes.length; rowIndex++)
+        for (var rowIndex = 0; rowIndex < nodes.length; rowIndex++)
         {
-            for (var columnIndex = 0; columnIndex < this.nodes.length; columnIndex++)
+            for (var columnIndex = 0; columnIndex < nodes.length; columnIndex++)
             {
                 this.undirectedAdjaceyList[rowIndex][columnIndex] = 0;            
             }
@@ -90,10 +87,10 @@ d3.graphTheory = function(nodes, edges)
         // This is an undirected graph. Hence the both ways connections.
         // I should also make this adjacency list store the edge weight (1) 
         // instead of the name of the target.
-        for (var edgeIndex = 0; edgeIndex < this.edges.length; edgeIndex++)
+        for (var edgeIndex = 0; edgeIndex < edges.length; edgeIndex++)
         {
-            var sourcePosition = this.findNodePostionInNodeList(this.edges[edgeIndex]["source"]);
-            var targetPosition = this.findNodePostionInNodeList(this.edges[edgeIndex]["target"]);
+            var sourcePosition = this.findNodePostionInNodeList(edges[edgeIndex]["source"]);
+            var targetPosition = this.findNodePostionInNodeList(edges[edgeIndex]["target"]);
             this.undirectedAdjaceyList[sourcePosition][targetPosition] = 1;
             this.undirectedAdjaceyList[targetPosition][sourcePosition] = 1;            
         }
@@ -145,17 +142,17 @@ d3.graphTheory = function(nodes, edges)
             return -1; 
         }
         
-        var distances = new Array(this.nodes.length);
-        var previous = new Array(this.nodes.length); // Previous node to undefined initially
+        var distances = new Array(nodes.length);
+        var previous = new Array(nodes.length); // Previous node to undefined initially
         
-        for (var nodeIndex = 0; nodeIndex < this.nodes.length; nodeIndex++)
+        for (var nodeIndex = 0; nodeIndex < nodes.length; nodeIndex++)
         {
             distances[nodeIndex] = infinity;
         }
 
         distances[sourceNodeIndex] = 0;
 
-        var nodesToIterateOver = this.nodes.slice(0); // Copy the array. These both point to the same objects now.
+        var nodesToIterateOver = nodes.slice(0); // Copy the array. These both point to the same objects now.
         
         while (nodesToIterateOver.length > 0)
         {
@@ -231,7 +228,7 @@ d3.graphTheory = function(nodes, edges)
             if ((distances[iteratingNodePositionInGlobalList] !== infinity) && (distances[iteratingNodePositionInGlobalList] < closestDistance))
             {
                 closestDistance = distances[iteratingNodePositionInGlobalList];
-                closestNode = this.nodes[iteratingNodePositionInGlobalList];
+                closestNode = nodes[iteratingNodePositionInGlobalList];
             }
         }
         
@@ -254,7 +251,7 @@ d3.graphTheory = function(nodes, edges)
         {
             if (adjacencyList[nodeIndex] !== 0)
             {
-                neighborList.push(this.nodes[nodeIndex]["name"]); // Careful with these different indexes
+                neighborList.push(nodes[nodeIndex]["name"]); // Careful with these different indexes
             }
         }
         return neighborList;
@@ -265,12 +262,12 @@ d3.graphTheory = function(nodes, edges)
     this.calculateClosenessCentrality = function()
     {
         // Every node needs to be the start node
-        this.closenessCentrality = new Array(this.nodes.length);
+        this.closenessCentrality = new Array(nodes.length);
 
         // We want to calculate closeness centrality for every node
-        for (var nodeIndex in this.nodes)
+        for (var nodeIndex in nodes)
         {
-            var distances = this.dijkstras(this.nodes[nodeIndex]);            
+            var distances = this.dijkstras(nodes[nodeIndex]);            
             var closenessCentralityForIteratingNode = 0; 
             
             // Calculate the distances, and then sum their inverse
@@ -308,7 +305,7 @@ d3.graphTheory = function(nodes, edges)
     this.detectDisjointSubgraphs = function()
     {
         // Create a copy of the nodes list
-        var nodesToIterateOver = this.nodes.slice(0);
+        var nodesToIterateOver = nodes.slice(0);
         
         var collectionOfSets = new Array(); // Where we'll store all the results.
         
@@ -328,8 +325,8 @@ d3.graphTheory = function(nodes, edges)
             {                
                 if ((distances[nodeIndex] !== infinity) && (distances[nodeIndex] !== 0))
                 {                    
-                    disjointSubgraph.push(this.nodes[nodeIndex]);
-                    var indexToRemove = nodesToIterateOver.indexOf(this.nodes[nodeIndex]);
+                    disjointSubgraph.push(nodes[nodeIndex]);
+                    var indexToRemove = nodesToIterateOver.indexOf(nodes[nodeIndex]);
                     nodesToIterateOver.splice(indexToRemove, 1); // the reachable node
                 }
             }
